@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Trafficked 🤡 — Full Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06060c;
+  --s1: #0c0c18;
+  --s2: #101022;
+  --border: #1e1e35;
+  --border2: #252540;
+  --text: #ddddf5;
+  --muted: #52527a;
+  --faint: #0e0e1e;
+  --pos: #22d898;
+  --neg: #ff4f6d;
+  --neu: #3a3a5c;
+
+  --c0: #ff3c6e;
+  --c1: #00e0ff;
+  --c2: #ffc400;
+  --c3: #b388ff;
+  --c4: #00e676;
+  --c5: #ff7043;
+  --c6: #f48fb1;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(6,6,12,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 32px;
+  height: 52px;
+  gap: 0;
+}
+.nav-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+  margin-right: 32px;
+  white-space: nowrap;
+  background: linear-gradient(90deg, var(--c0), var(--c2), var(--c1));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-link {
+  padding: 6px 14px;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s; white-space: nowrap;
+}
+.nav-link:hover { color: var(--text); }
+.nav-link.active { color: var(--text); border-bottom-color: var(--c0); }
+
+/* ── SECTIONS ── */
+section {
+  display: none;
+  padding: 40px 28px 80px;
+  max-width: 1140px;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+}
+section.visible { display: block; animation: fadeUp 0.4s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── HERO SECTION ── */
+#sec-hero { padding-top: 80px; text-align: center; }
+.hero-label { font-size: 10px; letter-spacing: 0.35em; color: var(--muted); text-transform: uppercase; margin-bottom: 18px; }
+.hero-title {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  line-height: 0.95;
+  margin-bottom: 24px;
+  letter-spacing: -0.04em;
+}
+.hero-title .line1 { display: block; color: var(--text); }
+.hero-title .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--c0) 0%, var(--c2) 45%, var(--c1) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-meta { font-size: 11px; color: var(--muted); margin-bottom: 56px; }
+.hero-meta span { color: var(--text); }
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  margin-bottom: 56px;
+  border: 1px solid var(--border);
+}
+@media (max-width: 700px) { .hero-stats { grid-template-columns: repeat(3,1fr); } }
+.hs-cell {
+  background: var(--s1);
+  padding: 24px 16px 18px;
+  position: relative; overflow: hidden;
+}
+.hs-cell::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.hs-cell:nth-child(1)::after { background: var(--c0); }
+.hs-cell:nth-child(2)::after { background: var(--c1); }
+.hs-cell:nth-child(3)::after { background: var(--c2); }
+.hs-cell:nth-child(4)::after { background: var(--c3); }
+.hs-cell:nth-child(5)::after { background: var(--c4); }
+.hs-cell:nth-child(6)::after { background: var(--c5); }
+.hs-val { font-family: 'Unbounded', sans-serif; font-size: 1.8rem; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+.hs-label { font-size: 9px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
+
+/* ── SECTION TITLE ── */
+.sec-title {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-bottom: 28px;
+  display: flex; align-items: center; gap: 14px;
+  letter-spacing: -0.02em;
+}
+.sec-title::after { content: ''; flex:1; height:1px; background: var(--border); }
+.sec-sub { font-size: 10px; color: var(--muted); margin-top: -20px; margin-bottom: 28px; }
+
+/* ── CARDS / PANELS ── */
+.panel {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.panel-title {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.panel-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── GRIDS ── */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 820px) { .g2,.g3,.g4 { grid-template-columns: 1fr; } }
+@media (min-width: 820px) and (max-width: 1000px) { .g3,.g4 { grid-template-columns: 1fr 1fr; } }
+
+/* ── BAR CHART ── */
+.bar-chart { display: flex; flex-direction: column; gap: 7px; }
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar-label { font-size: 10px; min-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { flex:1; height: 18px; background: rgba(255,255,255,0.03); overflow: hidden; }
+.bar-fill { height:100%; display:flex; align-items:center; padding-left:5px; font-size:9px; font-weight:700; color:rgba(0,0,0,0.7); min-width:4px; }
+.bar-count { font-size: 10px; color: var(--muted); min-width: 48px; text-align: right; }
+
+/* ── HOUR HEATMAP ── */
+.heatmap { display: grid; grid-template-columns: repeat(24,1fr); gap:3px; }
+.hm-cell { aspect-ratio:1; border-radius:2px; cursor:pointer; transition: transform 0.1s; }
+.hm-cell:hover { transform: scale(1.3); z-index:2; }
+.hm-labels { display:grid; grid-template-columns:repeat(24,1fr); gap:3px; margin-top:3px; }
+.hm-lbl { font-size:7px; color:var(--muted); text-align:center; }
+
+/* ── WEEKDAY CHART ── */
+.wd-chart { display:flex; align-items:flex-end; gap:6px; height:80px; }
+.wd-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
+.wd-bar { width:100%; border-radius:2px 2px 0 0; min-height:3px; }
+.wd-lbl { font-size:8px; color:var(--muted); }
+
+/* ── MONTHLY CHART ── */
+.mo-chart { display:flex; align-items:flex-end; gap:10px; height:80px; }
+.mo-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
+.mo-bar { width:100%; border-radius:2px 2px 0 0; min-height:3px; }
+.mo-lbl { font-size:8px; color:var(--muted); }
+.mo-val { font-size:9px; color:var(--text); }
+
+/* ── WORD TAGS ── */
+.word-tags { display:flex; flex-wrap:wrap; gap:6px; }
+.wtag { padding:3px 10px; border:1px solid var(--border); font-size:10px; color:var(--text); background:var(--faint); transition:all 0.2s; cursor:default; }
+.wtag:hover { border-color: currentColor; }
+
+/* ── PILL STATS ── */
+.pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.pill { flex:1; min-width:80px; background:var(--faint); border:1px solid var(--border); padding:12px 14px; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.pill-val { font-family:'Unbounded',sans-serif; font-weight:700; font-size:1.2rem; line-height:1; }
+.pill-lbl { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; text-align:center; }
+
+/* ── PERSON TABS ── */
+.person-tabs { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px; }
+.ptab {
+  padding:7px 16px; font-family:'DM Mono',monospace; font-size:10px;
+  cursor:pointer; border:1px solid var(--border); background:var(--s1); color:var(--muted);
+  transition:all 0.2s; letter-spacing:0.05em;
+}
+.ptab:hover { color:var(--text); border-color: var(--border2); }
+.ptab.active { font-weight:700; color:#000; border-color:transparent; }
+
+.person-panel { display:none; }
+.person-panel.visible { display:block; animation: fadeUp 0.3s ease; }
+
+/* ── PERSON HEADER ── */
+.person-header {
+  display:flex; align-items:center; gap:20px;
+  padding:22px; background:var(--s1); border:1px solid var(--border);
+  margin-bottom:16px; position:relative; overflow:hidden;
+}
+.person-header::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background: var(--p-accent); }
+.p-avatar {
+  width:54px; height:54px; border-radius:50%;
+  background: var(--p-accent);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Unbounded',sans-serif; font-weight:900; font-size:1.1rem;
+  color:#000; flex-shrink:0;
+}
+.p-info h3 { font-family:'Unbounded',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:3px; }
+.p-tagline { font-size:10px; color:var(--muted); }
+.p-quickstats { margin-left:auto; display:flex; gap:20px; flex-shrink:0; }
+.pqs { text-align:center; }
+.pqs-val { font-family:'Unbounded',sans-serif; font-weight:700; font-size:1.3rem; color: var(--p-accent); }
+.pqs-lbl { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; }
+@media(max-width:700px) { .p-quickstats { display:none; } }
+
+/* ── ROAST BOX ── */
+.roast {
+  border:1px solid var(--border); border-left:3px solid var(--p-accent);
+  background: var(--faint); padding:16px;
+  font-size:12px; line-height:1.8; color:var(--muted);
+}
+.roast strong { color:var(--text); }
+
+/* ── SENTIMENT ── */
+.sent-row { display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid var(--border); }
+.sent-row:last-child { border-bottom:none; }
+.sent-name { font-size:11px; font-weight:700; min-width:120px; }
+.sent-stack { flex:1; height:20px; display:flex; overflow:hidden; border-radius:2px; }
+.s-pos { background:var(--pos); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#000; }
+.s-neg { background:var(--neg); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#000; }
+.s-neu { background:var(--neu); flex:1; display:flex; align-items:center; justify-content:center; font-size:9px; color:var(--muted); }
+
+/* ── SLANG COMPARISON ── */
+.slang-cmp { display:flex; flex-direction:column; gap:5px; }
+.sc-row { display:flex; align-items:center; gap:10px; }
+.sc-word { font-size:11px; font-weight:700; min-width:70px; color:var(--text); }
+.sc-bars { flex:1; display:flex; gap:2px; align-items:flex-end; height:22px; }
+.sc-bar { height:100%; border-radius:2px 2px 0 0; min-width:4px; cursor:pointer; transition:opacity 0.15s; }
+.sc-bar:hover { opacity:0.7; }
+.sc-tot { font-size:10px; color:var(--muted); min-width:28px; text-align:right; }
+
+/* ── MENTION MATRIX ── */
+.matrix-wrap { overflow-x:auto; }
+.mtable { border-collapse:collapse; width:100%; font-size:10px; }
+.mtable th, .mtable td { padding:7px 9px; border:1px solid var(--border); text-align:center; }
+.mtable th { color:var(--muted); font-weight:400; font-size:9px; letter-spacing:0.07em; }
+.mtable td.sender { text-align:left; font-weight:700; padding-left:10px; white-space:nowrap; }
+.mtable td.diag { background:var(--s2); color:var(--border2); }
+
+/* ── MENTION BARS ── */
+.mb-list { display:flex; flex-direction:column; gap:5px; }
+.mb-row { display:flex; align-items:center; gap:8px; }
+.mb-name { font-size:10px; min-width:108px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mb-track { flex:1; height:16px; background:rgba(255,255,255,0.03); overflow:hidden; }
+.mb-fill { height:100%; font-size:9px; font-weight:700; color:#000; display:flex; align-items:center; padding-left:4px; min-width:4px; }
+.mb-num { font-size:10px; color:var(--muted); min-width:32px; text-align:right; }
+
+/* ── INSIGHT CARD ── */
+.insight {
+  background:var(--faint); border:1px solid var(--border); padding:14px;
+  font-size:12px; line-height:1.75; color:var(--muted);
+  border-left:3px solid var(--i-color, var(--border2));
+  margin-bottom:8px;
+}
+.insight strong { color:var(--text); }
+.insight em { color: var(--i-color, var(--text)); font-style:normal; font-weight:700; }
+
+/* ── SENT WORD BREAKDOWN ── */
+.swb-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+.swb-card { background:var(--s2); border:1px solid var(--border); padding:14px; }
+.swb-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.swb-name { font-size:11px; font-weight:700; }
+.swb-ratio { font-size:10px; }
+.swb-cols { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.swb-col-lbl { font-size:9px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:5px; }
+.swb-word { font-size:10px; padding:2px 0; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; }
+
+/* ── SLANG PERSON CARDS ── */
+.sp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px; }
+.sp-card {
+  background:var(--s2); border:1px solid var(--border); padding:14px;
+  border-top:2px solid var(--p-accent);
+}
+.sp-name { font-size:9px; font-weight:700; color:var(--p-accent); margin-bottom:8px; letter-spacing:0.06em; text-transform:uppercase; }
+.sp-total { font-family:'Unbounded',sans-serif; font-weight:900; font-size:1.4rem; color:var(--p-accent); margin-bottom:2px; }
+.sp-sub { font-size:9px; color:var(--muted); margin-bottom:10px; }
+.sp-words { display:flex; flex-direction:column; gap:3px; }
+.sp-wrow { display:flex; justify-content:space-between; font-size:10px; }
+
+/* ── TOOLTIP ── */
+#tt { position:fixed; background:#1c1c35; border:1px solid var(--border2); padding:5px 10px; font-size:10px; pointer-events:none; z-index:9999; display:none; }
+
+/* ── LEGEND ROW ── */
+.legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+.leg-item { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--text); }
+.leg-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+
+/* ── HERO MEMBER GRID ── */
+.member-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px; margin-bottom:16px; }
+.member-card {
+  background:var(--s1); border:1px solid var(--border);
+  padding:16px 12px; text-align:center; cursor:pointer;
+  transition:all 0.2s; border-top:2px solid var(--m-accent);
+}
+.member-card:hover { background:var(--s2); transform:translateY(-2px); }
+.mc-init { font-family:'Unbounded',sans-serif; font-weight:900; font-size:1.6rem; color:var(--m-accent); line-height:1; margin-bottom:6px; }
+.mc-name { font-size:10px; color:var(--text); font-weight:700; margin-bottom:3px; }
+.mc-count { font-size:9px; color:var(--muted); }
+.mc-pct { font-size:9px; color:var(--m-accent); }
+</style>
+</head>
+<body>
+
+<div id="tt"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🤡 HT</div>
+  <div class="nav-links">
+    <div class="nav-link active" onclick="showSec('hero',this)">Overview</div>
+    <div class="nav-link" onclick="showSec('group',this)">Group Stats</div>
+    <div class="nav-link" onclick="showSec('members',this)">Members</div>
+    <div class="nav-link" onclick="showSec('slang',this)">Slang</div>
+    <div class="nav-link" onclick="showSec('sentiment',this)">Sentiment</div>
+    <div class="nav-link" onclick="showSec('mentions',this)">Mentions</div>
+    <div class="nav-link" onclick="showSec('swearing',this)">🤬 Swearing</div>
+    <div class="nav-link" onclick="showSec('contribution',this)">📊 Contribution</div>
+    <div class="nav-link" onclick="showSec('nword',this)">🚨 N-Word</div>
+    <div class="nav-link" onclick="showSec('contribution',this)">📊 Contribution</div>
+    <div class="nav-link" onclick="showSec('nword',this)">🚨 N-Word</div>
+  </div>
+</nav>
+
+<!-- ══ OVERVIEW ══ -->
+<section id="sec-hero" class="visible">
+  <div class="hero-label">WhatsApp Group Analytics</div>
+  <h1 class="hero-title">
+    <span class="line1">Human</span>
+    <span class="line2">Trafficked 🤡</span>
+  </h1>
+  <p class="hero-meta">
+    <span>Dec 11, 2025</span> — <span>Mar 7, 2026</span> &nbsp;·&nbsp; <span>87 days</span> &nbsp;·&nbsp; <span>7 members</span>
+  </p>
+
+  <div class="hero-stats">
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c0)">64,258</div><div class="hs-label">Messages</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c1)">739</div><div class="hs-label">Per Day Avg</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c2)">1,525</div><div class="hs-label">Media Files</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c3)">961</div><div class="hs-label">Edits</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c4)">4.9</div><div class="hs-label">Avg Words/Msg</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c5)">Feb</div><div class="hs-label">Peak Month</div></div>
+  </div>
+
+  <div class="sec-title">The Crew</div>
+  <div class="member-grid" id="member-grid"></div>
+
+  <div class="sec-title">Quick Roasts</div>
+  <div id="hero-roasts"></div>
+</section>
+
+<!-- ══ GROUP STATS ══ -->
+<section id="sec-group">
+  <div class="sec-title">Group Statistics</div>
+
+  <div class="g2">
+    <div class="panel">
+      <div class="panel-title">Messages Per Person</div>
+      <div class="bar-chart" id="grp-person-bars"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Activity by Hour (IST)</div>
+      <div class="heatmap" id="grp-heatmap"></div>
+      <div class="hm-labels" id="grp-hm-labels"></div>
+      <div style="margin-top:10px;font-size:10px;color:var(--muted)">
+        Peak: <span style="color:var(--c0)">9–10 PM</span> · Deadzone: <span style="color:var(--muted)">4–7 AM</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="panel">
+      <div class="panel-title">Messages by Day of Week</div>
+      <div class="wd-chart" id="grp-weekday"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Monthly Volume</div>
+      <div class="mo-chart" id="grp-monthly"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Top Words (noise filtered)</div>
+    <div class="word-tags" id="grp-words"></div>
+  </div>
+</section>
+
+<!-- ══ MEMBERS ══ -->
+<section id="sec-members">
+  <div class="sec-title">Individual Members</div>
+  <div class="person-tabs" id="person-tabs"></div>
+  <div id="person-panels"></div>
+</section>
+
+<!-- ══ SLANG ══ -->
+<section id="sec-slang">
+  <div class="sec-title">Slang Usage</div>
+  <div class="sec-sub">Who says "fr", "fs", "ngl" and more</div>
+
+  <div class="legend" id="slang-legend"></div>
+
+  <div class="panel">
+    <div class="panel-title">Total Slang Per Person</div>
+    <div class="sp-grid" id="slang-cards"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Word-by-Word Breakdown (hover for details)</div>
+    <div class="slang-cmp" id="slang-cmp"></div>
+  </div>
+</section>
+
+<!-- ══ SENTIMENT ══ -->
+<section id="sec-sentiment">
+  <div class="sec-title">Sentiment Analysis</div>
+  <div class="sec-sub">Rule-based analysis across 64k messages</div>
+
+  <div class="panel">
+    <div class="panel-title">
+      Positive / Negative / Neutral Distribution
+      <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px">(% of messages)</span>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:12px">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--pos)"></div>Positive</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--neg)"></div>Negative</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--neu)"></div>Neutral</div>
+    </div>
+    <div id="sent-bars"></div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="insight" style="--i-color:var(--pos)"><strong>Most Positive: Mudit Agarwal</strong> — only member where positive% (10.1%) beats negative% (7.5%). Despite being the emoji-phobe, he's actually the calmest and most constructive in tone.</div>
+      <div class="insight" style="--i-color:var(--neg)"><strong>Most Negative: Ambikesh</strong> — 16.9% negative, the highest in the group. Said <em>"nhi"</em> 1,272 times and called people <em>"paagal"</em> 102 times. He's basically in a permanent argument.</div>
+      <div class="insight" style="--i-color:var(--c6)"><strong>Most Neutral: Tanishka</strong> — 87.8% neutral. When she shows up, she's informational. But she's also the only member with more positive than negative messages (8% vs 4.3%).</div>
+      <div class="insight" style="--i-color:var(--c1)"><strong>Flattest: Vihaan</strong> — 88.4% neutral, only 5% positive. Sends the most media but keeps his words completely deadpan.</div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Positive & Negative Words Per Person</div>
+      <div class="swb-grid" id="sent-words"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SWEARING ══ -->
+<section id="sec-swearing">
+  <div class="sec-title">Swearing Analysis 🤬</div>
+  <div class="sec-sub">807 total cuss words · sorted by intensity</div>
+
+  <!-- INTENSITY LEGEND -->
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:7px;padding:8px 16px;background:var(--s1);border:1px solid var(--border);border-left:3px solid #facc15;font-size:11px;color:var(--text)">
+      <span style="font-size:16px">😐</span> <div><div style="color:#facc15;font-weight:700;font-size:10px">MILD</div><div style="color:var(--muted);font-size:9px">damn · hell · wtf · ass · dumb · crap</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;padding:8px 16px;background:var(--s1);border:1px solid var(--border);border-left:3px solid #f97316;font-size:11px;color:var(--text)">
+      <span style="font-size:16px">😤</span> <div><div style="color:#f97316;font-weight:700;font-size:10px">MODERATE</div><div style="color:var(--muted);font-size:9px">shit · fuck · bitch · bc · bakwaas · saala</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;padding:8px 16px;background:var(--s1);border:1px solid var(--border);border-left:3px solid #ef4444;font-size:11px;color:var(--text)">
+      <span style="font-size:16px">🤯</span> <div><div style="color:#ef4444;font-weight:700;font-size:10px">INTENSE</div><div style="color:var(--muted);font-size:9px">mc · bsdk · retard · chutiya · gandu · dick</div></div>
+    </div>
+  </div>
+
+  <!-- STACKED INTENSITY BARS -->
+  <div class="panel">
+    <div class="panel-title">Intensity Breakdown Per Person</div>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <div class="leg-item"><div class="leg-dot" style="background:#facc15"></div>Mild</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#f97316"></div>Moderate</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#ef4444"></div>Intense</div>
+    </div>
+    <div id="swear-intensity-bars"></div>
+  </div>
+
+  <!-- SIDE BY SIDE TOTALS + GLOBAL -->
+  <div class="g2">
+    <div class="panel">
+      <div class="panel-title">Total Cuss Words (ranked)</div>
+      <div class="bar-chart" id="swear-bars"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Most Used Overall</div>
+      <div class="bar-chart" id="swear-global-bars"></div>
+    </div>
+  </div>
+
+  <!-- PER-PERSON INTENSITY CARDS -->
+  <div class="panel">
+    <div class="panel-title">Per-Person Swear Profiles</div>
+    <div id="swear-person-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px"></div>
+  </div>
+
+  <!-- WORD-BY-WORD COMPARISON -->
+  <div class="panel">
+    <div class="panel-title">Word-by-Word Comparison (hover bars)</div>
+    <div class="legend" id="swear-legend"></div>
+    <div id="swear-cmp"></div>
+  </div>
+
+  <div style="margin-top:8px">
+    <div class="insight" style="--i-color:var(--c0)"><strong>Siyona leads at 213</strong> — mostly moderate (129). Her top is <em>"shit"</em> (42×) then <em>"bc"</em> (35×). She dropped <em>"chutiya"</em> once though — so she has range.</div>
+    <div class="insight" style="--i-color:var(--c1)"><strong>Vihaan is the most intense cusser</strong> — 14 intense words, including <em>"bsdk"</em>, <em>"retard"</em> (5×) and <em>"dick"</em>. Mild on the surface, unhinged underneath.</div>
+    <div class="insight" style="--i-color:var(--c2)"><strong>Nishchay said "shit" 70 times</strong> — that's his whole personality. 39% of all his swearing is one word. The most mono-swear person here.</div>
+    <div class="insight" style="--i-color:var(--c5)"><strong>Yadvi's 48% is just "bc"</strong> — 31 out of 64 bad words. Efficient. Lazy. Iconic.</div>
+    <div class="insight" style="--i-color:var(--c4)"><strong>Mudit's dirtiest word is "hell"</strong> (27×). His intense list includes <em>"whore"</em> (1×) and <em>"mc"</em> (3×) — he saves the big guns for special occasions.</div>
+    <div class="insight" style="--i-color:var(--c6)"><strong>Tanishka: 0 across all three tiers.</strong> Not mild, not moderate, not intense. Either a saint or just not here.</div>
+  </div>
+</section>
+
+<!-- ══ MENTIONS ══ -->
+<section id="sec-mentions">
+  <div class="sec-title">Mention Matrix</div>
+  <div class="sec-sub">Who calls out whom by name</div>
+
+  <div class="g2">
+    <div class="panel">
+      <div class="panel-title">Most Talked About (received mentions)</div>
+      <div class="mb-list" id="recv-bars"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Most Name-Drops (outgoing mentions)</div>
+      <div class="mb-list" id="send-bars"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Full Matrix (row = who speaks · col = who is mentioned)</div>
+    <div class="matrix-wrap">
+      <table class="mtable" id="matrix-table"></table>
+    </div>
+  </div>
+
+  <div style="margin-top:8px">
+    <div class="insight" style="--i-color:var(--c1)"><strong>Vihaan → Nishchay</strong>: 368 mentions vs Nishchay → Vihaan 143. Vihaan is clearly more obsessed. Most lopsided pairing in the group.</div>
+    <div class="insight" style="--i-color:var(--c0)"><strong>Siyona is the social glue</strong> — 1,264 total outgoing mentions, most by far. She name-drops everyone. Most talked-about by her: Yadvi (295) and Tanishka (286).</div>
+    <div class="insight" style="--i-color:var(--c6)"><strong>Tanishka barely exists in her own messages</strong> — only mentioned 3 people total (13 times combined). But everyone else talks about her plenty.</div>
+    <div class="insight" style="--i-color:var(--c4)"><strong>Mudit is low-key about people</strong> — only 288 total outgoing mentions despite 7,405 messages. Talks a lot, mostly about things, not people.</div>
+  </div>
+</section>
+
+<!-- ══ CONTRIBUTION ══ -->
+<section id="sec-contribution">
+  <div class="sec-title">Conversation Contribution</div>
+  <div class="sec-sub">Who actually drove conversations — weighted score across 5 dimensions</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:20px" id="contrib-score-cards"></div>
+  <div class="g2">
+    <div class="panel">
+      <div class="panel-title">Contribution Score (out of 100)</div>
+      <div style="font-size:9px;color:var(--muted);margin-bottom:12px">Weighted: 30% message count · 30% total words · 20% vocabulary · 10% long messages · 10% media</div>
+      <div id="contrib-score-bars"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Total Words Written</div>
+      <div id="contrib-word-bars"></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="panel">
+      <div class="panel-title">Unique Vocabulary Size</div>
+      <div id="contrib-vocab-bars"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Questions Asked</div>
+      <div id="contrib-question-bars"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Long Messages (>10 words)</div>
+      <div id="contrib-long-bars"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Full Stats Table</div>
+    <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:10px" id="contrib-table"></table></div>
+  </div>
+  <div style="margin-top:8px">
+    <div class="insight" style="--i-color:var(--c0)"><strong>Siyona scores 97.4/100</strong> — most messages, most words (75,737 total), richest vocabulary (9,423 unique words), most long messages. She is this group's engine.</div>
+    <div class="insight" style="--i-color:var(--c2)"><strong>Nishchay edges Vihaan</strong> — 80.2 vs 76.8. Despite similar message counts, Nishchay writes more words per message. Vihaan compensates with 519 media files.</div>
+    <div class="insight" style="--i-color:var(--c3)"><strong>Ambikesh punches above his count</strong> — 4th in messages but 2nd in total words (59,820) and highest long-message rate (14.1%). He writes the meatiest messages.</div>
+    <div class="insight" style="--i-color:var(--c1)"><strong>Vihaan asks the most questions</strong> — 1,266 vs Siyona's 1,004. He drives conversation by interrogating, not monologuing.</div>
+    <div class="insight" style="--i-color:var(--c6)"><strong>Tanishka: 6.2/100.</strong> 941 messages, 4,535 words, 873 unique words. Less contribution than a single active day from Siyona.</div>
+  </div>
+</section>
+
+<!-- ══ N-WORD ══ -->
+<section id="sec-nword">
+  <div class="sec-title">🚨 The N-Word Log</div>
+  <div class="sec-sub">Tracked across all 64,258 messages</div>
+  <div style="background:var(--s1);border:1px solid var(--border);border-left:4px solid #ef4444;padding:28px;margin-bottom:20px;text-align:center">
+    <div style="font-family:'Unbounded',sans-serif;font-size:4rem;font-weight:900;color:#ef4444;line-height:1">13</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">total N-word uses across the group</div>
+    <div style="font-size:14px;color:var(--text);margin-top:14px;font-weight:700">Every single one: <span style="color:var(--c1)">Vihaan Shukla</span></div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px">Everyone else: 0 · No exceptions</div>
+  </div>
+  <div class="g2">
+    <div class="panel">
+      <div class="panel-title">N-Word Usage Per Person</div>
+      <div id="nword-bars"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Vihaan's Usage — Example Lines</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">Variants: nigga (10×) · niggas (2×) · nigger (1×)</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--c1);padding:10px;font-size:11px;color:var(--text);font-style:italic">"Niggas acting mad but somebody gotta do it"</div>
+        <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--c1);padding:10px;font-size:11px;color:var(--text);font-style:italic">"NIGGA WHAT"</div>
+        <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--muted);padding:10px;font-size:10px;color:var(--muted);font-style:italic">+ 11 more instances over 87 days ≈ once every 6.7 days</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:8px">
+    <div class="insight" style="--i-color:#ef4444"><strong>Vihaan said it 13 times. Nobody else said it once.</strong> That's consistent, not accidental — roughly once every week across the chat's lifespan.</div>
+    <div class="insight" style="--i-color:var(--muted)"><strong>Context:</strong> The examples suggest casual/exclamatory AAVE-influenced usage rather than directed slurs. Still — 13 uses, all from one person, all Vihaan.</div>
+  </div>
+</section>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const MEMBERS = ["Siyona","Vihaan Shukla","Nishchay Sinha","Ambikesh","Mudit Agarwal","Yadvi Gupta","Tanishka Renjith"];
+const SHORT = {"Siyona":"Siyona","Vihaan Shukla":"Vihaan","Nishchay Sinha":"Nishchay","Ambikesh":"Ambikesh","Mudit Agarwal":"Mudit","Yadvi Gupta":"Yadvi","Tanishka Renjith":"Tanishka"};
+const ACCENTS = {"Siyona":"#ff3c6e","Vihaan Shukla":"#00e0ff","Nishchay Sinha":"#ffc400","Ambikesh":"#b388ff","Mudit Agarwal":"#00e676","Yadvi Gupta":"#ff7043","Tanishka Renjith":"#f48fb1"};
+const TOTAL = 64258;
+
+const PERSON_DATA = {
+  "Siyona":       {total:13057,hours:{"9":44,"13":819,"14":1084,"15":1123,"16":771,"18":893,"19":1035,"20":1004,"21":1164,"22":1114,"23":999,"0":499,"11":470,"12":793,"10":171,"17":633,"3":30,"4":15,"5":2,"7":23,"8":34,"1":188,"6":29,"2":120},days:{"3":1949,"4":1894,"5":1385,"6":1891,"0":2395,"1":1884,"2":1659},words:[["all",164],["mere",153],["dont",153],["sahi",145],["cause",142],["log",136],["thats",134],["bohot",122],["arrey",120],["rahe",119],["kaha",114],["renjith",106],["dekh",105],["ill",105],["gupta",101]],avg_len:5.9,media:383,edits:90,monthly:{"2025-12":3656,"2026-01":2125,"2026-02":5719,"2026-03":1557},peak_hour:[21,1164],emoji_pct:6.7},
+  "Vihaan Shukla":{total:12890,hours:{"12":613,"14":916,"15":996,"16":1100,"19":1191,"20":1187,"0":115,"9":115,"10":314,"11":232,"13":938,"17":833,"22":967,"23":527,"4":5,"18":1128,"21":1359,"2":264,"1":57,"8":17,"5":2,"7":2,"3":12},days:{"1":1984,"2":1281,"3":2002,"4":1963,"5":1441,"6":1753,"0":2466},words:[["too",181],["sinha",162],["agarwal",145],["one",134],["she",126],["how",124],["all",117],["yuh",112],["vro",109],["btw",105],["did",101],["only",101],["yeah",98],["even",97],["right",95]],avg_len:3.6,media:519,edits:189,monthly:{"2026-01":1896,"2026-02":8922,"2026-03":2072},peak_hour:[21,1359],emoji_pct:2.3},
+  "Nishchay Sinha":{total:12475,hours:{"9":55,"10":190,"11":339,"14":880,"15":1053,"16":1274,"18":904,"20":825,"21":1115,"22":1117,"23":946,"6":2,"12":629,"13":946,"17":682,"19":888,"0":369,"1":156,"7":10,"8":9,"2":86},days:{"3":1778,"4":1901,"5":1512,"6":1939,"0":2107,"1":1910,"2":1328},words:[["cuz",193],["rha",158],["all",130],["renjith",125],["dont",115],["one",111],["thats",109],["got",104],["out",97],["how",95],["too",93],["get",88],["kyu",86],["gya",85],["agarwal",84]],avg_len:4.7,media:212,edits:120,monthly:{"2025-12":2574,"2026-01":2311,"2026-02":6315,"2026-03":1275},peak_hour:[16,1274],emoji_pct:3.1},
+  "Ambikesh":     {total:10753,hours:{"10":247,"11":532,"13":593,"14":1107,"15":1067,"16":728,"18":649,"19":1137,"20":1041,"22":518,"23":664,"8":25,"12":868,"21":589,"17":494,"9":102,"0":205,"7":21,"1":104,"2":40,"6":22},days:{"3":2022,"4":1416,"5":1244,"6":1649,"0":1731,"1":1329,"2":1362},words:[["hun",256],["hota",161],["bol",135],["bohot",132],["rahe",126],["mere",114],["wala",110],["paagal",102],["kyu",97],["one",93],["zyada",91],["aisa",91],["log",91],["kaise",89],["kaha",85]],avg_len:6.0,media:69,edits:214,monthly:{"2025-12":3209,"2026-01":1957,"2026-02":4583,"2026-03":1004},peak_hour:[19,1137],emoji_pct:4.1},
+  "Mudit Agarwal":{total:7405,hours:{"10":96,"11":137,"14":360,"15":481,"20":574,"21":887,"22":805,"23":541,"12":297,"13":328,"0":281,"17":403,"19":660,"16":540,"9":22,"18":636,"8":11,"1":140,"3":5,"6":1,"2":193,"7":7},days:{"3":1227,"4":1076,"5":736,"6":1185,"0":1202,"1":1274,"2":705},words:[["mein",129],["tho",111],["one",84],["all",75],["too",73],["right",65],["time",60],["alr",59],["how",58],["https",54],["don",53],["cuz",51],["sure",50],["aaja",50],["than",49]],avg_len:3.7,media:218,edits:147,monthly:{"2025-12":1338,"2026-01":1476,"2026-02":3739,"2026-03":852},peak_hour:[21,887],emoji_pct:0.6},
+  "Yadvi Gupta":  {total:6343,hours:{"10":228,"11":403,"13":516,"14":439,"15":450,"16":435,"17":274,"22":566,"23":450,"0":208,"12":560,"18":483,"19":486,"20":327,"21":363,"9":92,"3":12,"4":10,"8":2,"1":38,"2":1},days:{"3":1010,"4":1038,"5":744,"6":1056,"0":920,"1":898,"2":677},words:[["rhi",232],["mene",156],["rha",131],["abh",99],["gya",97],["gyi",81],["rhe",75],["aaj",72],["mere",70],["bol",68],["dekh",63],["https",62],["hota",61],["meri",58],["merko",57]],avg_len:4.5,media:110,edits:50,monthly:{"2025-12":2215,"2026-01":1267,"2026-02":2393,"2026-03":468},peak_hour:[22,566],emoji_pct:5.5},
+  "Tanishka Renjith":{total:941,hours:{"10":74,"14":58,"15":137,"20":81,"23":71,"0":29,"11":114,"12":75,"18":42,"21":53,"13":46,"16":31,"19":63,"22":40,"17":14,"9":7,"8":5,"7":1},days:{"3":285,"4":193,"5":86,"6":109,"0":56,"1":125,"2":87},words:[["terko",44],["tikhe",34],["bolo",32],["meko",30],["brother",27],["don",26],["bol",26],["rahe",24],["hum",24],["meri",22],["bacchi",22],["rhi",22],["log",22],["kyu",20],["mat",19]],avg_len:5.4,media:4,edits:149,monthly:{"2025-12":564,"2026-01":163,"2026-02":151,"2026-03":63},peak_hour:[15,137],emoji_pct:0.0}
+};
+
+const HOUR_DATA = {0:1706,1:683,2:704,3:59,4:30,5:4,6:54,7:64,8:103,9:438,10:1338,11:2227,12:3892,13:4214,14:4855,15:5326,16:4897,17:3334,18:4740,19:5503,20:5072,21:5660,22:5157,23:4198};
+const WEEKDAY_DATA = [{l:"Mon",v:10933},{l:"Tue",v:9485},{l:"Wed",v:7157},{l:"Thu",v:10335},{l:"Fri",v:9590},{l:"Sat",v:7160},{l:"Sun",v:9598}];
+const MONTH_DATA = [{l:"Dec'25",v:13602},{l:"Jan'26",v:11323},{l:"Feb'26",v:31987},{l:"Mar'26",v:7346}];
+const TOP_WORDS = [["mai",1533],["nahi",1524],["bhai",904],["woh",785],["kuch",752],["abhi",655],["same",555],["good",541],["bro",495],["why",467],["baat",505],["koi",584],["raha",667],["pata",508],["fir",476],["sab",784]];
+
+const SLANG_DATA = {
+  "Siyona":       {total:402, words:[["bro",83],["yup",66],["omg",48],["ik",31],["idk",23],["wtf",17],["rn",16],["damn",15],["fr",10],["ikr",9],["nah",7],["based",7],["bruh",6],["ngl",6],["lol",5]]},
+  "Vihaan Shukla":{total:1005,words:[["fr",254],["ngl",137],["btw",105],["nah",94],["bro",56],["highkey",56],["ik",49],["damn",36],["tbh",27],["bruh",27],["lowkey",26],["rn",16],["fs",16],["yep",14],["smh",13]]},
+  "Nishchay Sinha":{total:723,words:[["bro",230],["fr",81],["ngl",69],["nah",50],["bruh",41],["ikr",39],["idk",26],["rn",25],["lmao",23],["lol",17],["damn",17],["tbh",17],["smh",11],["imo",7],["fire",6]]},
+  "Ambikesh":     {total:534, words:[["fr",190],["bro",60],["ik",53],["idk",42],["lol",34],["btw",22],["tbh",20],["ikr",18],["fs",18],["ngl",15],["bruh",14],["rn",14],["based",4],["wtf",4],["damn",3]]},
+  "Mudit Agarwal":{total:298, words:[["fs",45],["yep",40],["nah",31],["rn",29],["fr",24],["tbh",24],["ik",16],["based",15],["mid",14],["btw",13],["idk",13],["bro",7],["ngl",6],["rizz",4],["wtf",4]]},
+  "Yadvi Gupta":  {total:143, words:[["bro",56],["nah",19],["ik",18],["idk",13],["omg",10],["btw",6],["tbh",6],["wtf",5],["fs",4],["fire",4],["based",2]]},
+  "Tanishka Renjith":{total:0,words:[]}
+};
+
+const SENT_DATA = {
+  "Siyona":       {pos:12.7,neg:13.6,neu:73.8,top_pos:[["yes",286],["yaar",265],["sahi",145],["bohot",122],["arrey",120]],top_neg:[["nahi",1123],["no",214],["kyu",100],["sorry",82],["paagal",75]]},
+  "Vihaan Shukla":{pos:5.0, neg:6.6, neu:88.4,top_pos:[["good",112],["right",95],["yes",78],["true",69],["nice",42]],top_neg:[["nahi",214],["no",189],["kyu",48],["bad",48],["never",44]]},
+  "Nishchay Sinha":{pos:7.3,neg:9.7, neu:83.1,top_pos:[["yes",159],["good",156],["right",55],["nice",45],["yay",41]],top_neg:[["nhi",469],["no",171],["kyu",86],["shit",70],["hell",38]]},
+  "Ambikesh":     {pos:6.6, neg:16.9,neu:76.4,top_pos:[["bohot",132],["yes",127],["nice",84],["yaar",71],["sahi",68]],top_neg:[["nhi",1272],["no",159],["paagal",102],["kyu",97],["mat",66]]},
+  "Mudit Agarwal":{pos:10.1,neg:7.5, neu:82.3,top_pos:[["yes",191],["good",140],["right",65],["sure",50],["yep",40]],top_neg:[["no",170],["nahi",142],["mat",30],["hell",27],["bad",23]]},
+  "Yadvi Gupta":  {pos:6.6, neg:13.2,neu:80.2,top_pos:[["yaar",78],["yes",58],["bohot",52],["sahi",51],["acha",39]],top_neg:[["nhi",652],["no",37],["mat",36],["shut",23],["bekar",16]]},
+  "Tanishka Renjith":{pos:8.0,neg:4.3,neu:87.8,top_pos:[["yaar",29],["acha",17],["sahi",14],["bohot",12],["true",3]],top_neg:[["kyu",20],["mat",19],["dikkat",3],["paagal",1]]}
+};
+
+const MENTION_DATA = {
+  "Siyona":         {"Vihaan Shukla":98,"Nishchay Sinha":265,"Ambikesh":107,"Mudit Agarwal":213,"Yadvi Gupta":295,"Tanishka Renjith":286},
+  "Vihaan Shukla":  {"Siyona":124,"Nishchay Sinha":368,"Ambikesh":73,"Mudit Agarwal":332,"Yadvi Gupta":102,"Tanishka Renjith":69},
+  "Nishchay Sinha": {"Siyona":119,"Vihaan Shukla":143,"Ambikesh":57,"Mudit Agarwal":267,"Yadvi Gupta":128,"Tanishka Renjith":286},
+  "Ambikesh":       {"Siyona":115,"Vihaan Shukla":82,"Nishchay Sinha":181,"Mudit Agarwal":179,"Yadvi Gupta":103,"Tanishka Renjith":117},
+  "Mudit Agarwal":  {"Siyona":38,"Vihaan Shukla":62,"Nishchay Sinha":89,"Ambikesh":16,"Yadvi Gupta":50,"Tanishka Renjith":33},
+  "Yadvi Gupta":    {"Siyona":97,"Vihaan Shukla":15,"Nishchay Sinha":88,"Ambikesh":27,"Mudit Agarwal":70,"Tanishka Renjith":138},
+  "Tanishka Renjith":{"Nishchay Sinha":10,"Ambikesh":2,"Yadvi Gupta":1}
+};
+
+const TAGLINES = {
+  "Siyona":"The Backbone · Group's main character 👑",
+  "Vihaan Shukla":"The Media Lord · Sends pics, barely texts 📸",
+  "Nishchay Sinha":"The Afternoon Menace · Peak hour: 4 PM 🕓",
+  "Ambikesh":"The Editor · 214 edits, most of anyone ✏️",
+  "Mudit Agarwal":"The Emoji-phobe · 0.6% emoji usage 🚫",
+  "Yadvi Gupta":"The Night Owl · Peak at 10 PM 🌙",
+  "Tanishka Renjith":"The Ghost · 941 messages in 87 days 👻"
+};
+
+const ROASTS = {
+  "Siyona":"<strong>Siyona</strong> is the group's load-bearing wall. 1 in 5 messages is hers. She peaks 9–10 PM, most active Mondays. She says <em>renjith</em> 106 times and <em>gupta</em> 101 times — calls people by last name like a teacher.",
+  "Vihaan Shukla":"<strong>Vihaan</strong> sent <strong>519 media files</strong>, the most of anyone. Didn't exist in December 2025, then sent 8,922 messages in February alone. Uses <em>\"fr\"</em> 254 times — more than anyone. Short, chaotic, mostly images.",
+  "Nishchay Sinha":"<strong>Nishchay</strong> is the afternoon warrior — peaks at <strong>4 PM</strong> while everyone else is at 9–10 PM. Says <em>\"bro\"</em> 230 times. Mentioned Tanishka 286 times. His entire personality is calling people bro.",
+  "Ambikesh":"<strong>Ambikesh</strong> has 214 edits — the absolute most. He calls people <em>\"paagal\"</em> 102 times and said <em>\"nhi\"</em> 1,272 times. He's in a permanent state of disagreement. Fewest media (69) — prefers angry words.",
+  "Mudit Agarwal":"<strong>Mudit</strong> uses emojis only <strong>0.6%</strong> of the time. Practically a robot. Says <em>\"alr\"</em> and shares links (<em>https</em> 54 times). But surprisingly the most positive member by sentiment.",
+  "Yadvi Gupta":"<strong>Yadvi</strong> <em>created this group</em> and then typed <em>\"rhi\"</em> 232 times. All her top words are phonetic Hindi. She started everything, then quietly faded — messaging dropped sharply after January.",
+  "Tanishka Renjith":"<strong>Tanishka</strong> is the ghost. 941 messages vs Siyona's 13,057. But her <strong>edit rate is 15.8%</strong> — highest by far. She agonises over every message, barely shows up, and sends zero emojis. She talks TO people not about them."
+};
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function initials(name) { return name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2); }
+function hex2rgb(h) { return {r:parseInt(h.slice(1,3),16),g:parseInt(h.slice(3,5),16),b:parseInt(h.slice(5,7),16)}; }
+function tt(el, text) {
+  el.addEventListener('mouseenter', e => { const t=document.getElementById('tt'); t.style.display='block'; t.innerHTML=text; });
+  el.addEventListener('mousemove', e => { const t=document.getElementById('tt'); t.style.left=(e.clientX+12)+'px'; t.style.top=(e.clientY-28)+'px'; });
+  el.addEventListener('mouseleave', () => { document.getElementById('tt').style.display='none'; });
+}
+
+function makeHeatmap(container, labelsEl, hourObj, accent) {
+  const maxH = Math.max(...Array.from({length:24},(_,h)=>hourObj[h]||0));
+  const {r,g,b} = hex2rgb(accent);
+  let cells='', lbls='';
+  for(let h=0;h<24;h++){
+    const v=hourObj[h]||0, i=v/maxH;
+    cells+=`<div class="hm-cell" style="background:rgba(${r},${g},${b},${0.08+i*0.85})" data-h="${h}" data-v="${v}"></div>`;
+    lbls+=`<div class="hm-lbl">${h%4===0?h:''}</div>`;
+  }
+  container.innerHTML=cells; labelsEl.innerHTML=lbls;
+  container.querySelectorAll('.hm-cell').forEach(c=>tt(c,`${c.dataset.h}:00–${+c.dataset.h+1}:00 <strong>${(+c.dataset.v).toLocaleString()}</strong> msgs`));
+}
+
+function makeWdChart(el, dayObj, accent) {
+  const vals = [0,1,2,3,4,5,6].map(i=>dayObj[i]||0);
+  const mx = Math.max(...vals);
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  el.innerHTML = vals.map((v,i)=>`<div class="wd-col">
+    <div class="wd-bar" style="height:${(v/mx*100).toFixed(1)}%;background:${accent};opacity:0.85"></div>
+    <div class="wd-lbl">${days[i]}</div>
+  </div>`).join('');
+}
+
+function makeMonthly(el, monthObj, accent) {
+  const vals = Object.values(monthObj);
+  const keys = Object.keys(monthObj);
+  const MO_LABELS = {"2025-12":"Dec'25","2026-01":"Jan'26","2026-02":"Feb'26","2026-03":"Mar'26"};
+  const mx = Math.max(...vals);
+  el.innerHTML = keys.map((k,i)=>`<div class="mo-col">
+    <div class="mo-val">${(vals[i]/1000).toFixed(1)}k</div>
+    <div class="mo-bar" style="height:${(vals[i]/mx*100).toFixed(1)}%;background:${accent};opacity:0.85"></div>
+    <div class="mo-lbl">${MO_LABELS[k]||k}</div>
+  </div>`).join('');
+}
+
+function makeBarChart(el, items, getColor) {
+  const mx = Math.max(...items.map(x=>x.v));
+  el.innerHTML = items.map(x=>`<div class="bar-row">
+    <div class="bar-label" style="color:${getColor(x)}">${x.label}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${(x.v/mx*100).toFixed(1)}%;background:${getColor(x)}">${(x.v/mx*100).toFixed(0)>15?x.v:''}</div></div>
+    <div class="bar-count">${x.v.toLocaleString()}</div>
+  </div>`).join('');
+}
+
+// ═══════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════
+function showSec(id, el) {
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('visible'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('visible');
+  el.classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+// BUILD OVERVIEW
+// ═══════════════════════════════════════════
+function buildOverview() {
+  // Member grid
+  const mg = document.getElementById('member-grid');
+  mg.innerHTML = MEMBERS.map(m=>`<div class="member-card" style="--m-accent:${ACCENTS[m]}" onclick="goMember('${m}')">
+    <div class="mc-init">${initials(m)}</div>
+    <div class="mc-name">${SHORT[m]}</div>
+    <div class="mc-count">${PERSON_DATA[m].total.toLocaleString()} msgs</div>
+    <div class="mc-pct">${(PERSON_DATA[m].total/TOTAL*100).toFixed(1)}% of group</div>
+  </div>`).join('');
+
+  // Roasts
+  const hr = document.getElementById('hero-roasts');
+  hr.innerHTML = MEMBERS.map(m=>`<div class="insight" style="--i-color:${ACCENTS[m]};margin-bottom:8px">${ROASTS[m]}</div>`).join('');
+}
+
+function goMember(name) {
+  showSec('members', document.querySelector('.nav-link:nth-child(3)'));
+  setTimeout(()=>{
+    document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.person-panel').forEach(p=>p.classList.remove('visible'));
+    const idx = MEMBERS.indexOf(name);
+    document.querySelectorAll('.ptab')[idx].classList.add('active');
+    document.querySelectorAll('.person-panel')[idx].classList.add('visible');
+    document.querySelectorAll('.ptab')[idx].style.background = ACCENTS[name];
+  }, 50);
+}
+
+// ═══════════════════════════════════════════
+// BUILD GROUP STATS
+// ═══════════════════════════════════════════
+function buildGroup() {
+  // Person bars
+  makeBarChart(document.getElementById('grp-person-bars'),
+    MEMBERS.map(m=>({label:SHORT[m],v:PERSON_DATA[m].total,m})),
+    x => ACCENTS[x.m]
+  );
+
+  // Heatmap
+  makeHeatmap(document.getElementById('grp-heatmap'), document.getElementById('grp-hm-labels'), HOUR_DATA, '#ff3c6e');
+
+  // Weekday
+  const mx = Math.max(...WEEKDAY_DATA.map(d=>d.v));
+  document.getElementById('grp-weekday').innerHTML = WEEKDAY_DATA.map(d=>`<div class="wd-col">
+    <div class="wd-bar" style="height:${(d.v/mx*100).toFixed(1)}%;background:linear-gradient(180deg,var(--c1),var(--c3));opacity:0.9"></div>
+    <div class="wd-lbl">${d.l}</div>
+  </div>`).join('');
+
+  // Monthly
+  const mmx = Math.max(...MONTH_DATA.map(d=>d.v));
+  const mcols = ['var(--c0)','var(--c3)','var(--c2)','var(--c1)'];
+  document.getElementById('grp-monthly').innerHTML = MONTH_DATA.map((d,i)=>`<div class="mo-col">
+    <div class="mo-val">${(d.v/1000).toFixed(1)}k</div>
+    <div class="mo-bar" style="height:${(d.v/mmx*100).toFixed(1)}%;background:${mcols[i]}"></div>
+    <div class="mo-lbl">${d.l}</div>
+  </div>`).join('');
+
+  // Words
+  const mw = TOP_WORDS[0][1];
+  document.getElementById('grp-words').innerHTML = TOP_WORDS.map(([w,c])=>`<span class="wtag" style="font-size:${10+Math.round(c/mw*8)}px">${w} <span style="color:var(--muted);font-size:9px">${c}</span></span>`).join('');
+}
+
+// ═══════════════════════════════════════════
+// BUILD MEMBERS
+// ═══════════════════════════════════════════
+function buildMembers() {
+  const tabsEl = document.getElementById('person-tabs');
+  const panelsEl = document.getElementById('person-panels');
+  const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+  MEMBERS.forEach((name, idx) => {
+    const d = PERSON_DATA[name];
+    const accent = ACCENTS[name];
+    const pct = (d.total/TOTAL*100).toFixed(1);
+    const editRate = (d.edits/d.total*100).toFixed(1);
+    const peakDay = DAYS[+Object.entries(d.days).sort((a,b)=>b[1]-a[1])[0][0]];
+
+    // Tab
+    const tab = document.createElement('div');
+    tab.className = 'ptab' + (idx===0?' active':'');
+    tab.textContent = SHORT[name];
+    if(idx===0) tab.style.background = accent;
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.ptab').forEach(t=>{t.classList.remove('active'); t.style.background='';});
+      document.querySelectorAll('.person-panel').forEach(p=>p.classList.remove('visible'));
+      tab.classList.add('active'); tab.style.background=accent;
+      document.getElementById('pp-'+idx).classList.add('visible');
+    });
+    tabsEl.appendChild(tab);
+
+    // Panel
+    const panel = document.createElement('div');
+    panel.className = 'person-panel'+(idx===0?' visible':'');
+    panel.id = 'pp-'+idx;
+    panel.style.setProperty('--p-accent', accent);
+
+    const wordTags = d.words.slice(0,12).map(([w,c])=>`<span class="wtag" style="font-size:${10+Math.round(c/d.words[0][1]*7)}px;color:${accent}">${w} <span style="color:var(--muted);font-size:9px">${c}</span></span>`).join('');
+
+    panel.innerHTML = `
+      <div class="person-header">
+        <div class="p-avatar">${initials(name)}</div>
+        <div class="p-info"><h3>${name}</h3><div class="p-tagline">${TAGLINES[name]}</div></div>
+        <div class="p-quickstats">
+          <div class="pqs"><div class="pqs-val">${d.total.toLocaleString()}</div><div class="pqs-lbl">messages</div></div>
+          <div class="pqs"><div class="pqs-val">${pct}%</div><div class="pqs-lbl">of group</div></div>
+          <div class="pqs"><div class="pqs-val">${d.avg_len}</div><div class="pqs-lbl">avg words</div></div>
+        </div>
+      </div>
+      <div class="pills">
+        <div class="pill"><div class="pill-val" style="color:${accent}">${d.media}</div><div class="pill-lbl">Media</div></div>
+        <div class="pill"><div class="pill-val" style="color:${accent}">${d.edits}</div><div class="pill-lbl">Edits (${editRate}%)</div></div>
+        <div class="pill"><div class="pill-val" style="color:${accent}">${d.emoji_pct}%</div><div class="pill-lbl">Emoji Rate</div></div>
+        <div class="pill"><div class="pill-val" style="color:${accent}">${d.peak_hour[0]}:00</div><div class="pill-lbl">Peak Hour</div></div>
+        <div class="pill"><div class="pill-val" style="color:${accent}">${peakDay}</div><div class="pill-lbl">Peak Day</div></div>
+      </div>
+      <div class="g2">
+        <div class="panel">
+          <div class="panel-title">Activity by Hour</div>
+          <div class="heatmap" id="hm-${idx}"></div>
+          <div class="hm-labels" id="hml-${idx}"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Day of Week</div>
+          <div class="wd-chart" id="wd-${idx}"></div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="panel">
+          <div class="panel-title">Monthly Volume</div>
+          <div class="mo-chart" id="mo-${idx}"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Top Words</div>
+          <div class="word-tags">${wordTags}</div>
+        </div>
+      </div>
+      <div class="roast" style="--p-accent:${accent}">${ROASTS[name]}</div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px">Individual Deep Dive <span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
+        <div class="g2" style="margin-bottom:16px">
+          <div class="panel" style="margin-bottom:0">
+            <div class="panel-title">Slang Usage</div>
+            <div id="dp-slang-${idx}" style="display:flex;flex-direction:column;gap:5px"></div>
+          </div>
+          <div class="panel" style="margin-bottom:0">
+            <div class="panel-title">Swear Words by Intensity</div>
+            <div id="dp-swear-${idx}"></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title">Sentiment Breakdown</div>
+          <div id="dp-sent-${idx}"></div>
+        </div>
+        <div class="g2" style="margin-bottom:0">
+          <div class="panel" style="margin-bottom:0">
+            <div class="panel-title">Who They Mention</div>
+            <div id="dp-mentions-out-${idx}" style="display:flex;flex-direction:column;gap:5px"></div>
+          </div>
+          <div class="panel" style="margin-bottom:0">
+            <div class="panel-title">Who Mentions Them</div>
+            <div id="dp-mentions-in-${idx}" style="display:flex;flex-direction:column;gap:5px"></div>
+          </div>
+        </div>
+      </div>
+    `;
+    panelsEl.appendChild(panel);
+
+    // Render charts after DOM insert
+    requestAnimationFrame(()=>{
+      if(idx===0){
+        makeHeatmap(document.getElementById('hm-0'), document.getElementById('hml-0'), d.hours, accent);
+        makeWdChart(document.getElementById('wd-0'), d.days, accent);
+        makeMonthly(document.getElementById('mo-0'), d.monthly, accent);
+        renderDeepDive(name, 0, accent);
+      }
+    });
+
+    tab.addEventListener('click', ()=>{
+      makeHeatmap(document.getElementById(`hm-${idx}`), document.getElementById(`hml-${idx}`), d.hours, accent);
+      makeWdChart(document.getElementById(`wd-${idx}`), d.days, accent);
+      makeMonthly(document.getElementById(`mo-${idx}`), d.monthly, accent);
+      renderDeepDive(name, idx, accent);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════
+// DEEP DIVE DATA
+// ═══════════════════════════════════════════
+const SLANG_DATA_DD = {
+  "Siyona":        {total:402, words:[["bro",83],["yup",66],["omg",48],["ik",31],["idk",23],["wtf",17],["rn",16],["damn",15],["fr",10],["ikr",9],["nah",7],["based",7],["bruh",6],["ngl",6],["lol",5]]},
+  "Vihaan Shukla": {total:1005,words:[["fr",254],["ngl",137],["btw",105],["nah",94],["bro",56],["highkey",56],["ik",49],["damn",36],["tbh",27],["bruh",27],["lowkey",26],["rn",16],["fs",16],["yep",14],["smh",13]]},
+  "Nishchay Sinha":{total:723, words:[["bro",230],["fr",81],["ngl",69],["nah",50],["bruh",41],["ikr",39],["idk",26],["rn",25],["lmao",23],["lol",17],["damn",17],["tbh",17],["smh",11],["imo",7],["fire",6]]},
+  "Ambikesh":      {total:534, words:[["fr",190],["bro",60],["ik",53],["idk",42],["lol",34],["btw",22],["tbh",20],["ikr",18],["fs",18],["ngl",15],["bruh",14],["rn",14],["based",4],["wtf",4],["damn",3]]},
+  "Mudit Agarwal": {total:298, words:[["fs",45],["yep",40],["nah",31],["rn",29],["fr",24],["tbh",24],["ik",16],["based",15],["mid",14],["btw",13],["idk",13],["bro",7],["ngl",6],["rizz",4],["wtf",4]]},
+  "Yadvi Gupta":   {total:143, words:[["bro",56],["nah",19],["ik",18],["idk",13],["omg",10],["btw",6],["tbh",6],["wtf",5],["fs",4],["fire",4],["based",2]]},
+  "Tanishka Renjith":{total:0, words:[]}
+};
+const SWEAR_DATA_DD = {
+  "Siyona":        {mild_total:76, mild_words:[["wtf",17],["hell",15],["damn",15],["ass",13],["dumb",7],["idiot",5],["stupid",3],["crap",1]], mod_total:129, mod_words:[["shit",42],["bc",35],["bitch",21],["shits",13],["fuck",7],["gadhe",3],["gadha",1],["bitches",1]], int_total:8,  int_words:[["retard",4],["mc",1],["chutiya",1],["stfu",1],["retarded",1]], grand_total:213},
+  "Vihaan Shukla": {mild_total:89, mild_words:[["damn",36],["hell",25],["ass",11],["wtf",9],["dumb",3],["trash",2],["crap",2],["stupid",1]], mod_total:73,  mod_words:[["fuck",28],["shit",25],["bc",8],["fucking",6],["shitty",3],["bullshit",2],["bitch",1]], int_total:14, int_words:[["retard",5],["retarded",3],["bsdk",2],["mc",2],["dick",1],["stfu",1]], grand_total:176},
+  "Nishchay Sinha":{mild_total:86, mild_words:[["hell",38],["ass",19],["damn",17],["crap",4],["dumb",3],["trash",3],["idiot",1],["stupid",1]], mod_total:87, mod_words:[["shit",70],["shits",11],["bc",3],["kutta",1],["gadhe",1],["bitch",1]], int_total:4, int_words:[["cock",2],["retarded",1],["stfu",1]], grand_total:177},
+  "Ambikesh":      {mild_total:34, mild_words:[["hell",13],["dumb",12],["wtf",4],["damn",3],["stupid",1],["idiot",1]], mod_total:52, mod_words:[["shit",18],["bakwaas",12],["bc",9],["saala",3],["fuck",3],["gadhe",2],["gadha",1],["bitches",1]], int_total:5, int_words:[["stfu",1],["retarded",1],["retard",1],["dick",1],["cock",1]], grand_total:91},
+  "Mudit Agarwal": {mild_total:50, mild_words:[["hell",27],["dumb",7],["ass",4],["wtf",4],["trash",3],["stupid",3],["idiot",2]], mod_total:26, mod_words:[["shit",11],["bc",7],["fuck",6],["shits",1],["bitch",1]], int_total:5, int_words:[["mc",3],["dick",1],["whore",1]], grand_total:81},
+  "Yadvi Gupta":   {mild_total:16, mild_words:[["wtf",5],["ass",4],["hell",4],["dumb",2],["idiot",1]], mod_total:47, mod_words:[["bc",31],["shit",11],["fuck",1],["bitching",1],["saali",1],["bitch",1],["gadhe",1]], int_total:1, int_words:[["gandu",1]], grand_total:64},
+  "Tanishka Renjith":{mild_total:0,mild_words:[],mod_total:0,mod_words:[],int_total:0,int_words:[],grand_total:0}
+};
+const SENT_DATA_DD = {
+  "Siyona":        {pos:12.7,neg:13.6,neu:73.8,top_pos:[["yes",286],["yaar",265],["sahi",145],["bohot",122],["arrey",120],["theek",119],["acha",96],["exactly",95]],top_neg:[["nahi",1123],["no",214],["kyu",100],["sorry",82],["paagal",75],["aise",71],["mat",67],["nhi",56]]},
+  "Vihaan Shukla": {pos:5.0, neg:6.6, neu:88.4,top_pos:[["good",112],["right",95],["yes",78],["true",69],["nice",42],["best",32],["exactly",25],["zyada",26]],      top_neg:[["nahi",214],["no",189],["kyu",48],["bad",48],["never",44],["damn",36],["shit",25],["zyada",26]]},
+  "Nishchay Sinha":{pos:7.3, neg:9.7, neu:83.1,top_pos:[["yes",159],["good",156],["right",55],["nice",45],["best",42],["yay",41],["bohot",42],["zyada",47]],         top_neg:[["nhi",469],["no",171],["kyu",86],["shit",70],["hell",38],["aise",43],["never",33],["zyada",47]]},
+  "Ambikesh":      {pos:6.6, neg:16.9,neu:76.4,top_pos:[["bohot",132],["yes",127],["nice",84],["yaar",71],["sahi",68],["acha",61],["lol",34],["zyada",91]],          top_neg:[["nhi",1272],["no",159],["paagal",102],["kyu",97],["mat",66],["aisa",91],["issue",54],["zyada",91]]},
+  "Mudit Agarwal": {pos:10.1,neg:7.5, neu:82.3,top_pos:[["yes",191],["good",140],["right",65],["sure",50],["yep",40],["true",39],["exactly",38],["yaar",35]],        top_neg:[["no",170],["nahi",142],["mat",30],["hell",27],["bad",23],["issue",24],["kyu",15],["mid",14]]},
+  "Yadvi Gupta":   {pos:6.6, neg:13.2,neu:80.2,top_pos:[["yaar",78],["yes",58],["bohot",52],["sahi",51],["acha",39],["exactly",20],["thik",20],["zyada",28]],        top_neg:[["nhi",652],["no",37],["mat",36],["shut",23],["bekar",16],["galat",19],["kyu",25],["zyada",28]]},
+  "Tanishka Renjith":{pos:8.0,neg:4.3,neu:87.8,top_pos:[["yaar",29],["acha",17],["sahi",14],["bohot",12],["true",3],["pyaar",1],["badiya",1],["happy",1]],           top_neg:[["kyu",20],["mat",19],["dikkat",3],["paagal",1]]}
+};
+const MENTION_DATA_DD = {
+  "Siyona":          {"Vihaan Shukla":98,"Nishchay Sinha":265,"Ambikesh":107,"Mudit Agarwal":213,"Yadvi Gupta":295,"Tanishka Renjith":286},
+  "Vihaan Shukla":   {"Siyona":124,"Nishchay Sinha":368,"Ambikesh":73,"Mudit Agarwal":332,"Yadvi Gupta":102,"Tanishka Renjith":69},
+  "Nishchay Sinha":  {"Siyona":119,"Vihaan Shukla":143,"Ambikesh":57,"Mudit Agarwal":267,"Yadvi Gupta":128,"Tanishka Renjith":286},
+  "Ambikesh":        {"Siyona":115,"Vihaan Shukla":82,"Nishchay Sinha":181,"Mudit Agarwal":179,"Yadvi Gupta":103,"Tanishka Renjith":117},
+  "Mudit Agarwal":   {"Siyona":38,"Vihaan Shukla":62,"Nishchay Sinha":89,"Ambikesh":16,"Yadvi Gupta":50,"Tanishka Renjith":33},
+  "Yadvi Gupta":     {"Siyona":97,"Vihaan Shukla":15,"Nishchay Sinha":88,"Ambikesh":27,"Mudit Agarwal":70,"Tanishka Renjith":138},
+  "Tanishka Renjith":{"Nishchay Sinha":10,"Ambikesh":2,"Yadvi Gupta":1}
+};
+
+function renderDeepDive(name, idx, accent) {
+  const MILD_C = "#facc15", MOD_C = "#f97316", INT_C = "#ef4444";
+
+  // ── SLANG ──
+  const slangEl = document.getElementById('dp-slang-' + idx);
+  if (slangEl && !slangEl.dataset.rendered) {
+    slangEl.dataset.rendered = '1';
+    const sd = SLANG_DATA_DD[name];
+    if (!sd || sd.total === 0) {
+      slangEl.innerHTML = '<div style="color:var(--muted);font-size:11px">No slang at all. Formal. 📝</div>';
+    } else {
+      const mx = sd.words[0][1];
+      slangEl.innerHTML = sd.words.slice(0,10).map(([w,c]) =>
+        `<div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:10px;min-width:72px;color:${accent};font-weight:700">${w}</div>
+          <div style="flex:1;height:14px;background:rgba(255,255,255,0.04);overflow:hidden">
+            <div style="width:${(c/mx*100).toFixed(0)}%;height:100%;background:${accent};opacity:0.65"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);min-width:24px;text-align:right">${c}</div>
+        </div>`).join('')
+        + `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--muted)">
+            Total: <strong style="color:${accent}">${sd.total}</strong> &nbsp;·&nbsp;
+            <span style="color:${accent}">${(sd.total/PERSON_DATA[name].total*100).toFixed(1)}%</span> of messages
+           </div>`;
+    }
+  }
+
+  // ── SWEARING ──
+  const swearEl = document.getElementById('dp-swear-' + idx);
+  if (swearEl && !swearEl.dataset.rendered) {
+    swearEl.dataset.rendered = '1';
+    const sw = SWEAR_DATA_DD[name];
+    if (!sw || sw.grand_total === 0) {
+      swearEl.innerHTML = '<div style="color:var(--muted);font-size:11px">Zero swear words. 😇 Saint.</div>';
+    } else {
+      const mPct = sw.grand_total ? (sw.mild_total/sw.grand_total*100).toFixed(0) : 0;
+      const moPct = sw.grand_total ? (sw.mod_total/sw.grand_total*100).toFixed(0) : 0;
+      const iPct = sw.grand_total ? (sw.int_total/sw.grand_total*100).toFixed(0) : 0;
+      const mkW = (arr, col) => arr.slice(0,4).map(([w,c]) =>
+        `<span style="display:inline-block;margin:2px;padding:2px 7px;border:1px solid ${col}40;background:${col}15;font-size:10px;color:${col}">${w}<span style="color:var(--muted);margin-left:4px;font-size:9px">${c}</span></span>`
+      ).join('');
+      swearEl.innerHTML = `
+        <div style="display:flex;height:10px;border-radius:2px;overflow:hidden;gap:2px;margin-bottom:10px">
+          <div style="width:${mPct}%;background:${MILD_C};min-width:${sw.mild_total>0?4:0}px;border-radius:2px"></div>
+          <div style="width:${moPct}%;background:${MOD_C};min-width:${sw.mod_total>0?4:0}px;border-radius:2px"></div>
+          <div style="width:${iPct}%;background:${INT_C};min-width:${sw.int_total>0?4:0}px;border-radius:2px"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:10px;text-align:center">
+          <div style="background:rgba(250,204,21,0.07);padding:4px;border:1px solid rgba(250,204,21,0.2)"><div style="font-size:12px;font-weight:700;color:${MILD_C}">${sw.mild_total}</div><div style="font-size:8px;color:var(--muted)">😐 MILD</div></div>
+          <div style="background:rgba(249,115,22,0.07);padding:4px;border:1px solid rgba(249,115,22,0.2)"><div style="font-size:12px;font-weight:700;color:${MOD_C}">${sw.mod_total}</div><div style="font-size:8px;color:var(--muted)">😤 MOD</div></div>
+          <div style="background:rgba(239,68,68,0.07);padding:4px;border:1px solid rgba(239,68,68,0.2)"><div style="font-size:12px;font-weight:700;color:${INT_C}">${sw.int_total}</div><div style="font-size:8px;color:var(--muted)">🤯 INTENSE</div></div>
+        </div>
+        <div style="margin-bottom:5px"><span style="font-size:9px;color:${MILD_C};letter-spacing:0.1em;text-transform:uppercase">MILD · </span>${mkW(sw.mild_words,MILD_C)||'<span style="color:var(--muted);font-size:10px">—</span>'}</div>
+        <div style="margin-bottom:5px"><span style="font-size:9px;color:${MOD_C};letter-spacing:0.1em;text-transform:uppercase">MOD · </span>${mkW(sw.mod_words,MOD_C)||'<span style="color:var(--muted);font-size:10px">—</span>'}</div>
+        <div style="margin-bottom:8px"><span style="font-size:9px;color:${INT_C};letter-spacing:0.1em;text-transform:uppercase">INTENSE · </span>${sw.int_words.length?mkW(sw.int_words,INT_C):'<span style="color:var(--muted);font-size:10px">none 😇</span>'}</div>
+        <div style="padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--muted)">Total: <strong style="color:${accent}">${sw.grand_total}</strong> &nbsp;·&nbsp; <span style="color:${accent}">${(sw.grand_total/PERSON_DATA[name].total*100).toFixed(2)}%</span> of messages</div>`;
+    }
+  }
+
+  // ── SENTIMENT ──
+  const sentEl = document.getElementById('dp-sent-' + idx);
+  if (sentEl && !sentEl.dataset.rendered) {
+    sentEl.dataset.rendered = '1';
+    const se = SENT_DATA_DD[name];
+    const posW = se.top_pos.slice(0,6).map(([w,c])=>`<div style="display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-bottom:1px solid var(--border)"><span style="color:#22d898">${w}</span><span style="color:var(--muted)">${c}</span></div>`).join('');
+    const negW = se.top_neg.slice(0,6).map(([w,c])=>`<div style="display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-bottom:1px solid var(--border)"><span style="color:#ff4f6d">${w}</span><span style="color:var(--muted)">${c}</span></div>`).join('');
+    sentEl.innerHTML = `
+      <div style="display:flex;height:22px;border-radius:2px;overflow:hidden;margin-bottom:12px">
+        <div style="width:${se.pos}%;background:#22d898;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#000;min-width:${se.pos>4?30:0}px">${se.pos>4?se.pos+'%':''}</div>
+        <div style="width:${se.neg}%;background:#ff4f6d;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#000;min-width:${se.neg>4?30:0}px">${se.neg>4?se.neg+'%':''}</div>
+        <div style="flex:1;background:#3a3a5c;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted)">${se.neu}% neutral</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><div style="font-size:9px;color:#22d898;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px">+ Positive</div>${posW}</div>
+        <div><div style="font-size:9px;color:#ff4f6d;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px">− Negative</div>${negW}</div>
+      </div>`;
+  }
+
+  // ── MENTIONS OUT ──
+  const outEl = document.getElementById('dp-mentions-out-' + idx);
+  if (outEl && !outEl.dataset.rendered) {
+    outEl.dataset.rendered = '1';
+    const out = MENTION_DATA_DD[name] || {};
+    const sorted = Object.entries(out).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+    if (!sorted.length) {
+      outEl.innerHTML = '<div style="color:var(--muted);font-size:11px">Mentions nobody 👻</div>';
+    } else {
+      const mx = sorted[0][1];
+      const total = sorted.reduce((s,[,v])=>s+v,0);
+      outEl.innerHTML = sorted.map(([t,c]) =>
+        `<div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:10px;min-width:78px;color:${ACCENTS[t]};font-weight:700">${SHORT[t]}</div>
+          <div style="flex:1;height:14px;background:rgba(255,255,255,0.04);overflow:hidden">
+            <div style="width:${(c/mx*100).toFixed(0)}%;height:100%;background:${ACCENTS[t]};opacity:0.75"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);min-width:24px;text-align:right">${c}</div>
+        </div>`).join('')
+        + `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--muted)">Total outgoing: <strong style="color:${accent}">${total}</strong></div>`;
+    }
+  }
+
+  // ── MENTIONS IN ──
+  const inEl = document.getElementById('dp-mentions-in-' + idx);
+  if (inEl && !inEl.dataset.rendered) {
+    inEl.dataset.rendered = '1';
+    const incoming = MEMBERS
+      .filter(m=>m!==name)
+      .map(m=>[m, MENTION_DATA_DD[m]?.[name]||0])
+      .filter(([,v])=>v>0)
+      .sort((a,b)=>b[1]-a[1]);
+    if (!incoming.length) {
+      inEl.innerHTML = '<div style="color:var(--muted);font-size:11px">Nobody mentions them 💀</div>';
+    } else {
+      const mx = incoming[0][1];
+      const total = incoming.reduce((s,[,v])=>s+v,0);
+      inEl.innerHTML = incoming.map(([src,c]) =>
+        `<div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:10px;min-width:78px;color:${ACCENTS[src]};font-weight:700">${SHORT[src]}</div>
+          <div style="flex:1;height:14px;background:rgba(255,255,255,0.04);overflow:hidden">
+            <div style="width:${(c/mx*100).toFixed(0)}%;height:100%;background:${ACCENTS[src]};opacity:0.75"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);min-width:24px;text-align:right">${c}</div>
+        </div>`).join('')
+        + `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--muted)">Total incoming: <strong style="color:${accent}">${total}</strong></div>`;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════
+// BUILD SLANG
+// ═══════════════════════════════════════════
+function buildSlang() {
+  // Legend
+  document.getElementById('slang-legend').innerHTML = MEMBERS.map(m=>`<div class="leg-item"><div class="leg-dot" style="background:${ACCENTS[m]}"></div>${SHORT[m]}</div>`).join('');
+
+  // Cards
+  document.getElementById('slang-cards').innerHTML = MEMBERS.map(m=>{
+    const d = SLANG_DATA[m];
+    const top = d.words.slice(0,6).map(([w,c])=>`<div class="sp-wrow"><span>${w}</span><span style="color:var(--muted)">${c}</span></div>`).join('');
+    return `<div class="sp-card" style="--p-accent:${ACCENTS[m]}">
+      <div class="sp-name">${SHORT[m]}</div>
+      <div class="sp-total">${d.total}</div>
+      <div class="sp-sub">total slang uses</div>
+      <div class="sp-words">${top||'<div style="color:var(--muted);font-size:10px">None detected</div>'}</div>
+    </div>`;
+  }).join('');
+
+  // Comparison
+  const KEY_SLANG = [
+    ["fr","fr (for real)"],["fs","fs (for sure)"],["ngl","ngl"],["bro","bro"],
+    ["bruh","bruh"],["nah","nah"],["idk","idk"],["ik","ik"],["tbh","tbh"],
+    ["btw","btw"],["lol","lol"],["omg","omg"],["rn","rn"],["based","based"],["highkey","highkey"],["lowkey","lowkey"]
+  ];
+  let cmpHtml = '';
+  KEY_SLANG.forEach(([word, label])=>{
+    const vals = MEMBERS.map(m=>{ const e=SLANG_DATA[m].words.find(([w])=>w===word); return e?e[1]:0; });
+    const total = vals.reduce((a,b)=>a+b,0);
+    if(!total) return;
+    const mx = Math.max(...vals);
+    const bars = vals.map((v,i)=>{
+      const pct = mx>0?(v/mx*100).toFixed(1):0;
+      const bar = `<div class="sc-bar" style="width:${Math.max(pct,v>0?3:0)}%;background:${ACCENTS[MEMBERS[i]]};opacity:${v>0?0.85:0.1}" data-n="${SHORT[MEMBERS[i]]}" data-w="${word}" data-v="${v}"></div>`;
+      return bar;
+    }).join('');
+    cmpHtml += `<div class="sc-row"><div class="sc-word">${label}</div><div class="sc-bars">${bars}</div><div class="sc-tot">${total}</div></div>`;
+  });
+  document.getElementById('slang-cmp').innerHTML = cmpHtml;
+  document.querySelectorAll('#slang-cmp .sc-bar').forEach(b=>{
+    tt(b, `<strong>${b.dataset.n}</strong> said "${b.dataset.w}" <strong>${b.dataset.v}</strong>×`);
+  });
+}
+
+// ═══════════════════════════════════════════
+// BUILD SENTIMENT
+// ═══════════════════════════════════════════
+function buildSentiment() {
+  // Bars
+  document.getElementById('sent-bars').innerHTML = MEMBERS.map(m=>{
+    const d = SENT_DATA[m];
+    return `<div class="sent-row">
+      <div class="sent-name" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+      <div class="sent-stack">
+        <div class="s-pos" style="width:${d.pos}%">${d.pos>=6?d.pos+'%':''}</div>
+        <div class="s-neg" style="width:${d.neg}%">${d.neg>=6?d.neg+'%':''}</div>
+        <div class="s-neu">${d.neu}%</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Word breakdown
+  document.getElementById('sent-words').innerHTML = MEMBERS.map(m=>{
+    const d = SENT_DATA[m];
+    const posW = d.top_pos.slice(0,5).map(([w,c])=>`<div class="swb-word"><span style="color:var(--pos)">${w}</span><span style="color:var(--muted)">${c}</span></div>`).join('');
+    const negW = d.top_neg.slice(0,5).map(([w,c])=>`<div class="swb-word"><span style="color:var(--neg)">${w}</span><span style="color:var(--muted)">${c}</span></div>`).join('');
+    return `<div class="swb-card">
+      <div class="swb-head">
+        <div class="swb-name" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+        <div class="swb-ratio"><span style="color:var(--pos)">${d.pos}%</span> / <span style="color:var(--neg)">${d.neg}%</span></div>
+      </div>
+      <div class="swb-cols">
+        <div class="swb-col-pos"><div class="swb-col-lbl" style="color:var(--pos)">+ Positive</div>${posW}</div>
+        <div class="swb-col-neg"><div class="swb-col-lbl" style="color:var(--neg)">− Negative</div>${negW}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+// BUILD MENTIONS
+// ═══════════════════════════════════════════
+function buildMentions() {
+  const recv = {}, send = {};
+  MEMBERS.forEach(t=>{ recv[t]=MEMBERS.reduce((s,sender)=>s+(MENTION_DATA[sender]?.[t]||0),0); });
+  MEMBERS.forEach(s=>{ send[s]=Object.values(MENTION_DATA[s]||{}).reduce((a,b)=>a+b,0); });
+
+  const maxR = Math.max(...Object.values(recv));
+  const maxS = Math.max(...Object.values(send));
+
+  document.getElementById('recv-bars').innerHTML = [...MEMBERS].sort((a,b)=>recv[b]-recv[a]).map(m=>`<div class="mb-row">
+    <div class="mb-name" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+    <div class="mb-track"><div class="mb-fill" style="width:${(recv[m]/maxR*100).toFixed(1)}%;background:${ACCENTS[m]}">${recv[m]/maxR>0.2?recv[m]:''}</div></div>
+    <div class="mb-num">${recv[m]}</div>
+  </div>`).join('');
+
+  document.getElementById('send-bars').innerHTML = [...MEMBERS].sort((a,b)=>send[b]-send[a]).map(m=>`<div class="mb-row">
+    <div class="mb-name" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+    <div class="mb-track"><div class="mb-fill" style="width:${(send[m]/maxS*100).toFixed(1)}%;background:${ACCENTS[m]}">${send[m]/maxS>0.2?send[m]:''}</div></div>
+    <div class="mb-num">${send[m]}</div>
+  </div>`).join('');
+
+  // Matrix
+  const allVals = MEMBERS.flatMap(s=>MEMBERS.map(t=>s===t?0:(MENTION_DATA[s]?.[t]||0)));
+  const allMax = Math.max(...allVals);
+  let thead=`<thead><tr><th>↓ \ →</th>`;
+  MEMBERS.forEach(m=>{thead+=`<th style="color:${ACCENTS[m]}">${SHORT[m]}</th>`;});
+  thead+=`</tr></thead>`;
+  let tbody='<tbody>';
+  MEMBERS.forEach(sender=>{
+    tbody+=`<tr><td class="sender" style="color:${ACCENTS[sender]}">${SHORT[sender]}</td>`;
+    MEMBERS.forEach(target=>{
+      if(sender===target){tbody+=`<td class="diag">—</td>`;}
+      else{
+        const v=MENTION_DATA[sender]?.[target]||0;
+        const int=v/allMax;
+        const {r,g,b}=hex2rgb(ACCENTS[target]);
+        const bg=int>0.04?`rgba(${r},${g},${b},${0.07+int*0.55})`:'transparent';
+        tbody+=`<td style="background:${bg};color:${v>0?'var(--text)':'var(--muted)'}">${v||'·'}</td>`;
+      }
+    });
+    tbody+=`</tr>`;
+  });
+  tbody+='</tbody>';
+  document.getElementById('matrix-table').innerHTML = thead+tbody;
+}
+
+
+// ═══════════════════════════════════════════
+// BUILD SWEARING
+// ═══════════════════════════════════════════
+function buildSwearing() {
+  const SWEAR_DATA = {
+    "Siyona":        {mild_total:76,  mild_words:[["wtf",17],["hell",15],["damn",15],["ass",13],["dumb",7],["idiot",5],["stupid",3],["crap",1]],  mod_total:129, mod_words:[["shit",42],["bc",35],["bitch",21],["shits",13],["fuck",7],["gadhe",3],["gadha",1],["bitches",1]],  int_total:8,  int_words:[["retard",4],["mc",1],["chutiya",1],["stfu",1],["retarded",1]],  grand_total:213},
+    "Vihaan Shukla": {mild_total:89,  mild_words:[["damn",36],["hell",25],["ass",11],["wtf",9],["dumb",3],["trash",2],["crap",2],["stupid",1]],   mod_total:73,  mod_words:[["fuck",28],["shit",25],["bc",8],["fucking",6],["shitty",3],["bullshit",2],["bitch",1]],           int_total:14, int_words:[["retard",5],["retarded",3],["bsdk",2],["mc",2],["dick",1],["stfu",1]],           grand_total:176},
+    "Nishchay Sinha":{mild_total:86,  mild_words:[["hell",38],["ass",19],["damn",17],["crap",4],["dumb",3],["trash",3],["idiot",1],["stupid",1]],  mod_total:87,  mod_words:[["shit",70],["shits",11],["bc",3],["kutta",1],["gadhe",1],["bitch",1]],                           int_total:4,  int_words:[["cock",2],["retarded",1],["stfu",1]],                                          grand_total:177},
+    "Ambikesh":      {mild_total:34,  mild_words:[["hell",13],["dumb",12],["wtf",4],["damn",3],["stupid",1],["idiot",1]],                          mod_total:52,  mod_words:[["shit",18],["bakwaas",12],["bc",9],["saala",3],["fuck",3],["gadhe",2],["gadha",1],["bitches",1]],  int_total:5,  int_words:[["stfu",1],["retarded",1],["retard",1],["dick",1],["cock",1]],               grand_total:91},
+    "Mudit Agarwal": {mild_total:50,  mild_words:[["hell",27],["dumb",7],["ass",4],["wtf",4],["trash",3],["stupid",3],["idiot",2]],                mod_total:26,  mod_words:[["shit",11],["bc",7],["fuck",6],["shits",1],["bitch",1]],                                          int_total:5,  int_words:[["mc",3],["dick",1],["whore",1]],                                               grand_total:81},
+    "Yadvi Gupta":   {mild_total:16,  mild_words:[["wtf",5],["ass",4],["hell",4],["dumb",2],["idiot",1]],                                          mod_total:47,  mod_words:[["bc",31],["shit",11],["fuck",1],["bitching",1],["saali",1],["bitch",1],["gadhe",1]],             int_total:1,  int_words:[["gandu",1]],                                                                   grand_total:64},
+    "Tanishka Renjith":{mild_total:0, mild_words:[], mod_total:0, mod_words:[], int_total:0, int_words:[], grand_total:0}
+  };
+
+  const GLOBAL_WORDS = [["shit",177],["hell",122],["bc",93],["damn",71],["ass",51],["fuck",45],["wtf",39],["dumb",34],["bitch",25],["shits",25],["bakwaas",12],["retard",10],["idiot",10],["stupid",9],["fucking",8]];
+  const MILD_COLOR = "#facc15", MOD_COLOR = "#f97316", INT_COLOR = "#ef4444";
+
+  // Stacked intensity bars
+  const maxGrand = Math.max(...MEMBERS.map(m => SWEAR_DATA[m].grand_total));
+  document.getElementById('swear-intensity-bars').innerHTML = [...MEMBERS]
+    .sort((a,b) => SWEAR_DATA[b].grand_total - SWEAR_DATA[a].grand_total)
+    .map(m => {
+      const d = SWEAR_DATA[m];
+      const total = d.grand_total;
+      const barW = (total / maxGrand * 100).toFixed(1);
+      const mildW  = total ? (d.mild_total / total * 100).toFixed(1) : 0;
+      const modW   = total ? (d.mod_total  / total * 100).toFixed(1) : 0;
+      const intW   = total ? (d.int_total  / total * 100).toFixed(1) : 0;
+      return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+        <div style="font-size:10px;font-weight:700;min-width:108px;color:${ACCENTS[m]}">${SHORT[m]}</div>
+        <div style="flex:1;height:22px;background:rgba(255,255,255,0.03);overflow:hidden;position:relative">
+          <div style="width:${barW}%;height:100%;display:flex;overflow:hidden">
+            <div style="width:${mildW}%;background:${MILD_COLOR};opacity:0.85;height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#000;min-width:${d.mild_total>0?4:0}px">${mildW>15?d.mild_total:''}</div>
+            <div style="width:${modW}%;background:${MOD_COLOR};opacity:0.85;height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#000;min-width:${d.mod_total>0?4:0}px">${modW>15?d.mod_total:''}</div>
+            <div style="width:${intW}%;background:${INT_COLOR};opacity:0.9;height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;min-width:${d.int_total>0?4:0}px">${intW>15?d.int_total:''}</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);min-width:50px;text-align:right">${total} <span style="font-size:9px">(${(total/PERSON_DATA[m].total*100).toFixed(2)}%)</span></div>
+      </div>`;
+    }).join('');
+
+  // Total bars
+  const maxTotal = Math.max(...MEMBERS.map(m => SWEAR_DATA[m].grand_total));
+  document.getElementById('swear-bars').innerHTML = [...MEMBERS]
+    .sort((a,b) => SWEAR_DATA[b].grand_total - SWEAR_DATA[a].grand_total)
+    .map(m => {
+      const d = SWEAR_DATA[m];
+      const pct = (d.grand_total/maxTotal*100).toFixed(1);
+      return `<div class="bar-row">
+        <div class="bar-label" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${ACCENTS[m]}">${pct>20?d.grand_total:''}</div></div>
+        <div class="bar-count">${d.grand_total}</div>
+      </div>`;
+    }).join('');
+
+  // Global top words coloured by tier
+  function wordTier(w) {
+    const mild = ["damn","hell","wtf","ass","dumb","crap","trash","stupid","idiot"];
+    const intense = ["retard","mc","bsdk","dick","cock","stfu","whore","gandu","chutiya","retarded"];
+    if (intense.includes(w)) return INT_COLOR;
+    if (mild.includes(w)) return MILD_COLOR;
+    return MOD_COLOR;
+  }
+  const maxGW = GLOBAL_WORDS[0][1];
+  document.getElementById('swear-global-bars').innerHTML = GLOBAL_WORDS.slice(0,12).map(([w,c]) => {
+    const pct = (c/maxGW*100).toFixed(1);
+    const col = wordTier(w);
+    return `<div class="bar-row">
+      <div class="bar-label" style="color:${col}">${w}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col};opacity:0.85">${pct>20?c:''}</div></div>
+      <div class="bar-count">${c}</div>
+    </div>`;
+  }).join('');
+
+  // Per-person intensity cards
+  document.getElementById('swear-person-cards').innerHTML = MEMBERS.map(m => {
+    const d = SWEAR_DATA[m];
+    if (d.grand_total === 0) {
+      return `<div style="background:var(--s2);border:1px solid var(--border);padding:16px;border-top:2px solid ${ACCENTS[m]}">
+        <div style="font-size:9px;font-weight:700;color:${ACCENTS[m]};text-transform:uppercase;margin-bottom:6px">${SHORT[m]}</div>
+        <div style="font-size:2rem;font-family:'Unbounded',sans-serif;font-weight:900;color:${ACCENTS[m]}">0</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">pure as snow ❄️</div>
+      </div>`;
+    }
+    const totalStr = d.grand_total;
+    const mPct = (d.mild_total/d.grand_total*100).toFixed(0);
+    const moPct = (d.mod_total/d.grand_total*100).toFixed(0);
+    const iPct = (d.int_total/d.grand_total*100).toFixed(0);
+    
+    const mildW = d.mild_words.slice(0,4).map(([w,c])=>`<span style="background:rgba(250,204,21,0.12);border:1px solid rgba(250,204,21,0.25);padding:2px 7px;font-size:10px;color:#facc15;margin:2px;display:inline-block">${w}<span style="color:var(--muted);margin-left:4px;font-size:9px">${c}</span></span>`).join('');
+    const modW  = d.mod_words.slice(0,4).map(([w,c])=>`<span style="background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.25);padding:2px 7px;font-size:10px;color:#f97316;margin:2px;display:inline-block">${w}<span style="color:var(--muted);margin-left:4px;font-size:9px">${c}</span></span>`).join('');
+    const intW  = d.int_words.length ? d.int_words.slice(0,4).map(([w,c])=>`<span style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);padding:2px 7px;font-size:10px;color:#ef4444;margin:2px;display:inline-block">${w}<span style="color:var(--muted);margin-left:4px;font-size:9px">${c}</span></span>`).join('') : `<span style="color:var(--muted);font-size:10px">none 😇</span>`;
+
+    return `<div style="background:var(--s2);border:1px solid var(--border);padding:16px;border-top:2px solid ${ACCENTS[m]}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-size:10px;font-weight:700;color:${ACCENTS[m]};text-transform:uppercase">${SHORT[m]}</div>
+        <div style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.3rem;color:${ACCENTS[m]}">${totalStr}</div>
+      </div>
+      <div style="display:flex;height:8px;margin-bottom:12px;overflow:hidden;border-radius:2px;gap:2px">
+        <div style="width:${mPct}%;background:${MILD_COLOR};border-radius:2px;min-width:${d.mild_total>0?4:0}px"></div>
+        <div style="width:${moPct}%;background:${MOD_COLOR};border-radius:2px;min-width:${d.mod_total>0?4:0}px"></div>
+        <div style="width:${iPct}%;background:${INT_COLOR};border-radius:2px;min-width:${d.int_total>0?4:0}px"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;text-align:center">
+        <div style="background:rgba(250,204,21,0.07);padding:4px"><div style="font-size:11px;font-weight:700;color:#facc15">${d.mild_total}</div><div style="font-size:8px;color:var(--muted)">MILD</div></div>
+        <div style="background:rgba(249,115,22,0.07);padding:4px"><div style="font-size:11px;font-weight:700;color:#f97316">${d.mod_total}</div><div style="font-size:8px;color:var(--muted)">MOD</div></div>
+        <div style="background:rgba(239,68,68,0.07);padding:4px"><div style="font-size:11px;font-weight:700;color:#ef4444">${d.int_total}</div><div style="font-size:8px;color:var(--muted)">INTENSE</div></div>
+      </div>
+      <div style="margin-bottom:6px"><div style="font-size:9px;color:#facc15;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">😐 Mild</div><div style="display:flex;flex-wrap:wrap">${mildW||'<span style="color:var(--muted);font-size:10px">—</span>'}</div></div>
+      <div style="margin-bottom:6px"><div style="font-size:9px;color:#f97316;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">😤 Moderate</div><div style="display:flex;flex-wrap:wrap">${modW||'<span style="color:var(--muted);font-size:10px">—</span>'}</div></div>
+      <div><div style="font-size:9px;color:#ef4444;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">🤯 Intense</div><div style="display:flex;flex-wrap:wrap">${intW}</div></div>
+    </div>`;
+  }).join('');
+
+  // Legend
+  document.getElementById('swear-legend').innerHTML = MEMBERS.map(m =>
+    `<div class="leg-item"><div class="leg-dot" style="background:${ACCENTS[m]}"></div>${SHORT[m]}</div>`
+  ).join('');
+
+  // Word-by-word comparison
+  const KEY_SWEARS = [
+    ["damn","😐 damn",MILD_COLOR],["hell","😐 hell",MILD_COLOR],["wtf","😐 wtf",MILD_COLOR],["ass","😐 ass",MILD_COLOR],["dumb","😐 dumb",MILD_COLOR],["crap","😐 crap",MILD_COLOR],["trash","😐 trash",MILD_COLOR],["stupid","😐 stupid",MILD_COLOR],["idiot","😐 idiot",MILD_COLOR],
+    ["shit","😤 shit",MOD_COLOR],["bc","😤 bc",MOD_COLOR],["fuck","😤 fuck",MOD_COLOR],["bitch","😤 bitch",MOD_COLOR],["bakwaas","😤 bakwaas",MOD_COLOR],["saala","😤 saala",MOD_COLOR],["gadhe","😤 gadhe",MOD_COLOR],
+    ["retard","🤯 retard",INT_COLOR],["mc","🤯 mc",INT_COLOR],["bsdk","🤯 bsdk",INT_COLOR],["stfu","🤯 stfu",INT_COLOR],["dick","🤯 dick",INT_COLOR],["cock","🤯 cock",INT_COLOR]
+  ];
+
+  const allData = {};
+  MEMBERS.forEach(m => {
+    const d = SWEAR_DATA[m];
+    [...d.mild_words,...d.mod_words,...d.int_words].forEach(([w,c]) => {
+      if(!allData[w]) allData[w]={};
+      allData[w][m]=c;
+    });
+  });
+
+  let cmpHtml = '';
+  KEY_SWEARS.forEach(([word,label,col]) => {
+    const vals = MEMBERS.map(m => allData[word]?.[m]||0);
+    const total = vals.reduce((a,b)=>a+b,0);
+    if(!total) return;
+    const mx = Math.max(...vals);
+    const bars = vals.map((v,i) => `<div class="sc-bar" style="width:${mx>0?Math.max(v/mx*100,v>0?3:0):0}%;background:${ACCENTS[MEMBERS[i]]};opacity:${v>0?0.85:0.1}" data-n="${SHORT[MEMBERS[i]]}" data-w="${word}" data-v="${v}"></div>`).join('');
+    cmpHtml += `<div class="sc-row"><div class="sc-word" style="color:${col};font-size:10px">${label}</div><div class="sc-bars">${bars}</div><div class="sc-tot">${total}</div></div>`;
+  });
+  document.getElementById('swear-cmp').innerHTML = `<div class="slang-cmp">${cmpHtml}</div>`;
+  document.querySelectorAll('#swear-cmp .sc-bar').forEach(b => {
+    tt(b, `<strong>${b.dataset.n}</strong> said "${b.dataset.w}" <strong>${b.dataset.v}</strong>×`);
+  });
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+buildOverview();
+buildGroup();
+buildMembers();
+buildSlang();
+buildSentiment();
+buildMentions();
+buildSwearing();
+// ═══════════════════════════════════════════
+// BUILD CONTRIBUTION
+// ═══════════════════════════════════════════
+function buildContribution() {
+  const STATS = {
+    "Siyona":        {total_msgs:13057,total_words:75737,unique_words:9423,avg_words:6.0,media:383,long_msgs:1694,long_pct:13.4,questions:1004},
+    "Vihaan Shukla": {total_msgs:12890,total_words:46446,unique_words:7474,avg_words:3.8,media:519,long_msgs:498, long_pct:4.0, questions:1266},
+    "Nishchay Sinha":{total_msgs:12475,total_words:57894,unique_words:9011,avg_words:4.7,media:212,long_msgs:912, long_pct:7.4, questions:422},
+    "Ambikesh":      {total_msgs:10753,total_words:59820,unique_words:7978,avg_words:5.6,media:69, long_msgs:1505,long_pct:14.1,questions:1063},
+    "Mudit Agarwal": {total_msgs:7405, total_words:27334,unique_words:5157,avg_words:3.8,media:218,long_msgs:264, long_pct:3.7, questions:399},
+    "Yadvi Gupta":   {total_msgs:6343, total_words:28551,unique_words:4544,avg_words:4.6,media:110,long_msgs:412, long_pct:6.6, questions:530},
+    "Tanishka Renjith":{total_msgs:941,total_words:4535, unique_words:873, avg_words:4.8,media:4,  long_msgs:49,  long_pct:5.2, questions:0}
+  };
+  const SCORES = {"Siyona":97.4,"Vihaan Shukla":76.8,"Nishchay Sinha":80.2,"Ambikesh":75.5,"Mudit Agarwal":44.5,"Yadvi Gupta":40.1,"Tanishka Renjith":6.2};
+
+  // Score cards
+  const sorted = [...MEMBERS].sort((a,b)=>SCORES[b]-SCORES[a]);
+  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣'];
+  document.getElementById('contrib-score-cards').innerHTML = sorted.map((m,i) => `
+    <div style="background:var(--s1);border:1px solid var(--border);border-top:2px solid ${ACCENTS[m]};padding:16px;text-align:center">
+      <div style="font-size:20px;margin-bottom:4px">${medals[i]}</div>
+      <div style="font-size:9px;font-weight:700;color:${ACCENTS[m]};text-transform:uppercase;margin-bottom:6px">${SHORT[m]}</div>
+      <div style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.6rem;color:${ACCENTS[m]};line-height:1">${SCORES[m]}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:3px">/ 100</div>
+    </div>`).join('');
+
+  function makeSimpleBars(elId, data, fmt) {
+    const sorted2 = [...MEMBERS].sort((a,b)=>data[b]-data[a]);
+    const mx = data[sorted2[0]];
+    document.getElementById(elId).innerHTML = sorted2.map(m => `
+      <div class="bar-row">
+        <div class="bar-label" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(data[m]/mx*100).toFixed(1)}%;background:${ACCENTS[m]}">${(data[m]/mx*100)>20?fmt(data[m]):''}</div></div>
+        <div class="bar-count">${fmt(data[m])}</div>
+      </div>`).join('');
+  }
+
+  makeSimpleBars('contrib-score-bars', SCORES, v => v);
+  makeSimpleBars('contrib-word-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].total_words])), v => v.toLocaleString());
+  makeSimpleBars('contrib-vocab-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].unique_words])), v => v.toLocaleString());
+  makeSimpleBars('contrib-question-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].questions])), v => v);
+  makeSimpleBars('contrib-long-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].long_msgs])), v => v);
+
+  // Table
+  const cols = ['total_msgs','total_words','unique_words','avg_words','long_pct','questions','media'];
+  const labels = ['Messages','Total Words','Unique Vocab','Avg Words/Msg','Long Msg %','Questions','Media'];
+  let thead = '<thead><tr><th style="text-align:left;padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:400">Member</th>';
+  labels.forEach(l => { thead += `<th style="padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:400">${l}</th>`; });
+  thead += '<th style="padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:400">Score</th></tr></thead>';
+
+  let tbody = '<tbody>';
+  sorted.forEach(m => {
+    const s = STATS[m];
+    tbody += `<tr>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;font-weight:700;color:${ACCENTS[m]};white-space:nowrap">${SHORT[m]}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.total_msgs.toLocaleString()}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.total_words.toLocaleString()}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.unique_words.toLocaleString()}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.avg_words}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.long_pct}%</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.questions}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.media}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center;font-weight:700;color:${ACCENTS[m]}">${SCORES[m]}</td>
+    </tr>`;
+  });
+  tbody += '</tbody>';
+  document.getElementById('contrib-table').innerHTML = thead + tbody;
+}
+
+// ═══════════════════════════════════════════
+// BUILD N-WORD
+// ═══════════════════════════════════════════
+function buildNWord() {
+  const NWORD_COUNTS = {"Siyona":0,"Vihaan Shukla":13,"Nishchay Sinha":0,"Ambikesh":0,"Mudit Agarwal":0,"Yadvi Gupta":0,"Tanishka Renjith":0};
+  const mx = 13;
+  document.getElementById('nword-bars').innerHTML = [...MEMBERS].map(m => {
+    const v = NWORD_COUNTS[m];
+    const pct = (v / mx * 100).toFixed(1);
+    return `<div class="bar-row">
+      <div class="bar-label" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${v>0?pct:0}%;background:${v>0?'#ef4444':ACCENTS[m]};opacity:${v>0?1:0.3}">${v>0?v:''}</div></div>
+      <div class="bar-count" style="color:${v>0?'#ef4444':'var(--muted)'}">${v > 0 ? v : '0'}</div>
+    </div>`;
+  }).join('');
+}
+
+buildContribution();
+buildNWord();
+
+// ═══════════════════════════════════════════
+// BUILD CONTRIBUTION
+// ═══════════════════════════════════════════
+function buildContribution() {
+  const STATS = {
+    "Siyona":        {total_msgs:13057,total_words:75737,unique_words:9423,avg_words:6.0,media:383,long_msgs:1694,long_pct:13.4,questions:1004},
+    "Vihaan Shukla": {total_msgs:12890,total_words:46446,unique_words:7474,avg_words:3.8,media:519,long_msgs:498, long_pct:4.0, questions:1266},
+    "Nishchay Sinha":{total_msgs:12475,total_words:57894,unique_words:9011,avg_words:4.7,media:212,long_msgs:912, long_pct:7.4, questions:422},
+    "Ambikesh":      {total_msgs:10753,total_words:59820,unique_words:7978,avg_words:5.6,media:69, long_msgs:1505,long_pct:14.1,questions:1063},
+    "Mudit Agarwal": {total_msgs:7405, total_words:27334,unique_words:5157,avg_words:3.8,media:218,long_msgs:264, long_pct:3.7, questions:399},
+    "Yadvi Gupta":   {total_msgs:6343, total_words:28551,unique_words:4544,avg_words:4.6,media:110,long_msgs:412, long_pct:6.6, questions:530},
+    "Tanishka Renjith":{total_msgs:941,total_words:4535,unique_words:873,avg_words:4.8,media:4,long_msgs:49,long_pct:5.2,questions:0}
+  };
+  const SCORES = {"Siyona":97.4,"Vihaan Shukla":76.8,"Nishchay Sinha":80.2,"Ambikesh":75.5,"Mudit Agarwal":44.5,"Yadvi Gupta":40.1,"Tanishka Renjith":6.2};
+  const sorted = [...MEMBERS].sort((a,b)=>SCORES[b]-SCORES[a]);
+  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣'];
+
+  document.getElementById('contrib-score-cards').innerHTML = sorted.map((m,i) =>
+    `<div style="background:var(--s1);border:1px solid var(--border);border-top:2px solid ${ACCENTS[m]};padding:16px;text-align:center">
+      <div style="font-size:18px;margin-bottom:4px">${medals[i]}</div>
+      <div style="font-size:9px;font-weight:700;color:${ACCENTS[m]};text-transform:uppercase;margin-bottom:6px">${SHORT[m]}</div>
+      <div style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.5rem;color:${ACCENTS[m]};line-height:1">${SCORES[m]}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">/ 100</div>
+    </div>`).join('');
+
+  function makeBars(elId, dataObj, fmt) {
+    const s2 = [...MEMBERS].sort((a,b)=>dataObj[b]-dataObj[a]);
+    const mx = dataObj[s2[0]];
+    document.getElementById(elId).innerHTML = s2.map(m =>
+      `<div class="bar-row">
+        <div class="bar-label" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(dataObj[m]/mx*100).toFixed(1)}%;background:${ACCENTS[m]}">${(dataObj[m]/mx*100)>20?fmt(dataObj[m]):''}</div></div>
+        <div class="bar-count">${fmt(dataObj[m])}</div>
+      </div>`).join('');
+  }
+
+  makeBars('contrib-score-bars', SCORES, v => v);
+  makeBars('contrib-word-bars',  Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].total_words])), v => v.toLocaleString());
+  makeBars('contrib-vocab-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].unique_words])), v => v.toLocaleString());
+  makeBars('contrib-question-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].questions])), v => v);
+  makeBars('contrib-long-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].long_msgs])), v => v);
+
+  const cols = ['total_msgs','total_words','unique_words','avg_words','long_pct','questions','media'];
+  const lbls = ['Messages','Words','Vocab','Avg Wds','Long%','Qs','Media'];
+  let th = '<thead><tr><th style="text-align:left;padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px;white-space:nowrap">Member</th>';
+  lbls.forEach(l => { th += `<th style="padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px">${l}</th>`; });
+  th += '<th style="padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px">Score</th></tr></thead><tbody>';
+  sorted.forEach(m => {
+    const s = STATS[m];
+    th += `<tr>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;font-weight:700;color:${ACCENTS[m]};white-space:nowrap">${SHORT[m]}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.total_msgs.toLocaleString()}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.total_words.toLocaleString()}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.unique_words.toLocaleString()}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.avg_words}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.long_pct}%</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.questions}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.media}</td>
+      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center;font-weight:700;color:${ACCENTS[m]}">${SCORES[m]}</td>
+    </tr>`;
+  });
+  document.getElementById('contrib-table').innerHTML = th + '</tbody>';
+}
+
+// ═══════════════════════════════════════════
+// BUILD N-WORD
+// ═══════════════════════════════════════════
+function buildNWord() {
+  const COUNTS = {"Siyona":0,"Vihaan Shukla":13,"Nishchay Sinha":0,"Ambikesh":0,"Mudit Agarwal":0,"Yadvi Gupta":0,"Tanishka Renjith":0};
+  document.getElementById('nword-bars').innerHTML = MEMBERS.map(m => {
+    const v = COUNTS[m];
+    return `<div class="bar-row">
+      <div class="bar-label" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${v>0?100:0}%;background:#ef4444;opacity:${v>0?1:0.2}">${v>0?v:''}</div></div>
+      <div class="bar-count" style="color:${v>0?'#ef4444':'var(--muted)'}">${v}</div>
+    </div>`;
+  }).join('');
+}
+
+buildContribution();
+buildNWord();
+
+</script>
+</body>
+</html>
