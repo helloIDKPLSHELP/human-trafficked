@@ -341,6 +341,12 @@ section.visible { display: block; animation: fadeUp 0.4s ease; }
 .mc-name { font-size:10px; color:var(--text); font-weight:700; margin-bottom:3px; }
 .mc-count { font-size:9px; color:var(--muted); }
 .mc-pct { font-size:9px; color:var(--m-accent); }
+
+.tl-btn{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:5px 13px;cursor:pointer;font-size:10px;font-family:inherit;}
+.tl-btn:hover{background:var(--s3,#2a2a4a);}
+.tl-vbtn{background:var(--s2);border:1px solid var(--border);color:var(--muted);padding:5px 14px;cursor:pointer;font-size:10px;font-family:inherit;}
+.tl-vbtn:hover{color:var(--text);}
+.active-vbtn{background:var(--accent)!important;color:#000!important;font-weight:700;}
 </style>
 </head>
 <body>
@@ -360,8 +366,7 @@ section.visible { display: block; animation: fadeUp 0.4s ease; }
     <div class="nav-link" onclick="showSec('swearing',this)">🤬 Swearing</div>
     <div class="nav-link" onclick="showSec('contribution',this)">📊 Contribution</div>
     <div class="nav-link" onclick="showSec('nword',this)">🚨 N-Word</div>
-    <div class="nav-link" onclick="showSec('contribution',this)">📊 Contribution</div>
-    <div class="nav-link" onclick="showSec('nword',this)">🚨 N-Word</div>
+    <div class="nav-link" onclick="showSec('timeline',this)">📈 Timeline</div>
   </div>
 </nav>
 
@@ -373,15 +378,15 @@ section.visible { display: block; animation: fadeUp 0.4s ease; }
     <span class="line2">Trafficked 🤡</span>
   </h1>
   <p class="hero-meta">
-    <span>Dec 11, 2025</span> — <span>Mar 7, 2026</span> &nbsp;·&nbsp; <span>87 days</span> &nbsp;·&nbsp; <span>7 members</span>
+    <span>Dec 11, 2025</span> — <span>Apr 23, 2026</span> &nbsp;·&nbsp; <span>134 days</span> &nbsp;·&nbsp; <span>7 members</span>
   </p>
 
   <div class="hero-stats">
-    <div class="hs-cell"><div class="hs-val" style="color:var(--c0)">64,258</div><div class="hs-label">Messages</div></div>
-    <div class="hs-cell"><div class="hs-val" style="color:var(--c1)">739</div><div class="hs-label">Per Day Avg</div></div>
-    <div class="hs-cell"><div class="hs-val" style="color:var(--c2)">1,525</div><div class="hs-label">Media Files</div></div>
-    <div class="hs-cell"><div class="hs-val" style="color:var(--c3)">961</div><div class="hs-label">Edits</div></div>
-    <div class="hs-cell"><div class="hs-val" style="color:var(--c4)">4.9</div><div class="hs-label">Avg Words/Msg</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c0)">73,710</div><div class="hs-label">Messages</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c1)">550</div><div class="hs-label">Per Day Avg</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c2)">1,733</div><div class="hs-label">Media Files</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c3)">1,080</div><div class="hs-label">Edits</div></div>
+    <div class="hs-cell"><div class="hs-val" style="color:var(--c4)">4.7</div><div class="hs-label">Avg Words/Msg</div></div>
     <div class="hs-cell"><div class="hs-val" style="color:var(--c5)">Feb</div><div class="hs-label">Peak Month</div></div>
   </div>
 
@@ -583,12 +588,12 @@ section.visible { display: block; animation: fadeUp 0.4s ease; }
 <!-- ══ CONTRIBUTION ══ -->
 <section id="sec-contribution">
   <div class="sec-title">Conversation Contribution</div>
-  <div class="sec-sub">Who actually drove conversations — weighted score across 5 dimensions</div>
+  <div class="sec-sub">Dual TF-IDF — scored against each person's own message history AND across the group simultaneously</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:20px" id="contrib-score-cards"></div>
   <div class="g2">
     <div class="panel">
       <div class="panel-title">Contribution Score (out of 100)</div>
-      <div style="font-size:9px;color:var(--muted);margin-bottom:12px">Weighted: 30% message count · 30% total words · 20% vocabulary · 10% long messages · 10% media</div>
+      <div style="font-size:9px;color:var(--muted);margin-bottom:12px">Dual TF-IDF: TF × IDF<sub>within</sub> × IDF<sub>group</sub> — scored against both that person's own message corpus AND the full group · 45% tfidf + 30% words + 15% vocab + 10% msgs</div>
       <div id="contrib-score-bars"></div>
     </div>
     <div class="panel">
@@ -602,34 +607,34 @@ section.visible { display: block; animation: fadeUp 0.4s ease; }
       <div id="contrib-vocab-bars"></div>
     </div>
     <div class="panel">
-      <div class="panel-title">Questions Asked</div>
+      <div class="panel-title">TF-IDF Sum (dual — within + group)</div>
       <div id="contrib-question-bars"></div>
     </div>
     <div class="panel">
-      <div class="panel-title">Long Messages (>10 words)</div>
+      <div class="panel-title">Avg Words Per Message</div>
       <div id="contrib-long-bars"></div>
     </div>
   </div>
   <div class="panel">
-    <div class="panel-title">Full Stats Table</div>
-    <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:10px" id="contrib-table"></table></div>
+    <div class="panel-title">Signature Words (highest TF-IDF per person)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px" id="contrib-table"></div>
   </div>
   <div style="margin-top:8px">
-    <div class="insight" style="--i-color:var(--c0)"><strong>Siyona scores 97.4/100</strong> — most messages, most words (75,737 total), richest vocabulary (9,423 unique words), most long messages. She is this group's engine.</div>
-    <div class="insight" style="--i-color:var(--c2)"><strong>Nishchay edges Vihaan</strong> — 80.2 vs 76.8. Despite similar message counts, Nishchay writes more words per message. Vihaan compensates with 519 media files.</div>
-    <div class="insight" style="--i-color:var(--c3)"><strong>Ambikesh punches above his count</strong> — 4th in messages but 2nd in total words (59,820) and highest long-message rate (14.1%). He writes the meatiest messages.</div>
-    <div class="insight" style="--i-color:var(--c1)"><strong>Vihaan asks the most questions</strong> — 1,266 vs Siyona's 1,004. He drives conversation by interrogating, not monologuing.</div>
-    <div class="insight" style="--i-color:var(--c6)"><strong>Tanishka: 6.2/100.</strong> 941 messages, 4,535 words, 873 unique words. Less contribution than a single active day from Siyona.</div>
+    <div class="insight" style="--i-color:var(--c0)"><strong>Siyona 98.6</strong> — still #1. Dual TF-IDF confirms her dominance: "isilye" (84×, only her), "chodh" (50×, only her), "abbey" (75×, nearly only her). The within-person IDF also shows these are concentrated, not noise.</div>
+    <div class="insight" style="--i-color:var(--c2)"><strong>Nishchay #2 at 93.7</strong> — "cuz" alone scores 0.0220 (193 uses, rare group-wide). The within-person IDF shows his top words are spread evenly across his messages — consistent linguistic signature, not one-off bursts.</div>
+    <div class="insight" style="--i-color:var(--c3)"><strong>Ambikesh #3 at 85.2 — flipped with Vihaan again.</strong> His Hindi vocab (lekin, jaega, mitr, mtlb) scores well on both axes. "Aya" (82×, only 3 people use it) is his #1 signature word.</div>
+    <div class="insight" style="--i-color:var(--c1)"><strong>Vihaan #4 at 83.7</strong> — "uhhhhhhhhhhhhh" scores highest (0.0317) because it's in exactly 81 messages and used by no one else. But that's his BEST word. His linguistic density is low — lots of filler, short reactions, media dumps.</div>
+    <div class="insight" style="--i-color:var(--c6)"><strong>Tanishka 24.0</strong> — her words score VERY high per-word (tikhe 0.0669, meko 0.0613) because the within-person IDF amplifies her small corpus. But raw volume drags her total down. What little she says is extremely distinctive — basically her own dialect.</div>
   </div>
 </section>
 
 <!-- ══ N-WORD ══ -->
 <section id="sec-nword">
   <div class="sec-title">🚨 The N-Word Log</div>
-  <div class="sec-sub">Tracked across all 64,258 messages</div>
+  <div class="sec-sub">Tracked across all 73,710 messages</div>
   <div style="background:var(--s1);border:1px solid var(--border);border-left:4px solid #ef4444;padding:28px;margin-bottom:20px;text-align:center">
-    <div style="font-family:'Unbounded',sans-serif;font-size:4rem;font-weight:900;color:#ef4444;line-height:1">13</div>
-    <div style="font-size:11px;color:var(--muted);margin-top:8px">total N-word uses across the group</div>
+    <div style="font-family:'Unbounded',sans-serif;font-size:4rem;font-weight:900;color:#ef4444;line-height:1">7</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">total N-word uses across the group · 7 separate messages</div>
     <div style="font-size:14px;color:var(--text);margin-top:14px;font-weight:700">Every single one: <span style="color:var(--c1)">Vihaan Shukla</span></div>
     <div style="font-size:10px;color:var(--muted);margin-top:4px">Everyone else: 0 · No exceptions</div>
   </div>
@@ -640,19 +645,68 @@ section.visible { display: block; animation: fadeUp 0.4s ease; }
     </div>
     <div class="panel">
       <div class="panel-title">Vihaan's Usage — Example Lines</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">Variants: nigga (10×) · niggas (2×) · nigger (1×)</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">Variants: nigga (2×) · niggas (1×) · nigger (2×) · niga (1×)</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--c1);padding:10px;font-size:11px;color:var(--text);font-style:italic">"Niggas acting mad but somebody gotta do it"</div>
         <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--c1);padding:10px;font-size:11px;color:var(--text);font-style:italic">"NIGGA WHAT"</div>
-        <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--muted);padding:10px;font-size:10px;color:var(--muted);font-style:italic">+ 11 more instances over 87 days ≈ once every 6.7 days</div>
+        <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--c1);padding:10px;font-size:11px;color:var(--text);font-style:italic">"Nigger" (said twice, standalone)</div>
+        <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--c1);padding:10px;font-size:11px;color:var(--text);font-style:italic">"Young thowed nigga selling low is you like that"</div>
+        <div style="background:var(--faint);border:1px solid var(--border);border-left:3px solid var(--c1);padding:10px;font-size:11px;color:var(--text);font-style:italic">"Jigaboi=niga+boi"</div>
       </div>
     </div>
   </div>
   <div style="margin-top:8px">
-    <div class="insight" style="--i-color:#ef4444"><strong>Vihaan said it 13 times. Nobody else said it once.</strong> That's consistent, not accidental — roughly once every week across the chat's lifespan.</div>
+    <div class="insight" style="--i-color:#ef4444"><strong>Vihaan said it 6 times across 7 separate messages.</strong> That's once every ~14 days. Two standalone "Nigger" drops, a rap lyric quote, a portmanteau ("niga+boi"), and two casual uses. Varied contexts, consistent source.</div>
     <div class="insight" style="--i-color:var(--muted)"><strong>Context:</strong> The examples suggest casual/exclamatory AAVE-influenced usage rather than directed slurs. Still — 13 uses, all from one person, all Vihaan.</div>
   </div>
 </section>
+
+<!-- ══ TIMELINE ══ -->
+<section id="sec-timeline">
+  <div class="sec-title">Message Timeline 📈</div>
+  <div class="sec-sub">Day-by-day activity · Dec 11 2025 → Apr 23 2026 · 132 days · scroll to zoom · drag to pan</div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px">
+    <div style="display:flex;gap:6px;flex-wrap:wrap" id="tl-legend"></div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button onclick="tlZoom(2)"    class="tl-btn">＋ Zoom</button>
+      <button onclick="tlZoom(0.5)"  class="tl-btn">－ Zoom</button>
+      <button onclick="tlReset()"    class="tl-btn">Reset</button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+    <button onclick="tlSetView('total')"   id="tl-v-total"   class="tl-vbtn active-vbtn">Group Total</button>
+    <button onclick="tlSetView('person')"  id="tl-v-person"  class="tl-vbtn">Per Person</button>
+    <button onclick="tlSetView('both')"    id="tl-v-both"    class="tl-vbtn">Both</button>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted)">
+      <label style="display:flex;align-items:center;gap:4px;cursor:pointer">
+        <input type="checkbox" id="tl-smooth" onchange="tlDraw()" style="accent-color:var(--accent)"> Smooth (7-day avg)
+      </label>
+    </div>
+  </div>
+
+  <div style="position:relative;background:var(--s1);border:1px solid var(--border);border-radius:2px" id="tl-wrap">
+    <canvas id="tl-canvas" style="display:block;cursor:crosshair"></canvas>
+    <div id="tl-tip" style="position:absolute;pointer-events:none;background:rgba(20,20,40,0.95);border:1px solid var(--border);padding:10px 14px;font-size:10px;color:var(--text);display:none;z-index:20;min-width:160px;border-radius:2px"></div>
+  </div>
+  <div style="text-align:center;font-size:9px;color:var(--muted);margin-top:6px">
+    🖱 Scroll / pinch to zoom · Drag to pan · Hover for daily breakdown
+  </div>
+
+  <div class="panel" style="margin-top:20px">
+    <div class="panel-title">Notable Moments</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px">
+      <div class="insight" style="--i-color:#ef4444;margin:0"><strong>Feb 23 — 3,150 msgs</strong><br><span style="font-size:10px;color:var(--muted)">All-time peak. Boards panic + full chaos.</span></div>
+      <div class="insight" style="--i-color:#f97316;margin:0"><strong>Feb 22–24 — 7,134 msgs</strong><br><span style="font-size:10px;color:var(--muted)">Three consecutive feral days.</span></div>
+      <div class="insight" style="--i-color:#facc15;margin:0"><strong>Jan 21 — 7 messages</strong><br><span style="font-size:10px;color:var(--muted)">Post-fight silence after the Jan 20 conflict.</span></div>
+      <div class="insight" style="--i-color:var(--c1);margin:0"><strong>Jan 15 — 1,600 msgs</strong><br><span style="font-size:10px;color:var(--muted)">Vihaan joins. Instantly the busiest Jan day.</span></div>
+      <div class="insight" style="--i-color:var(--c2);margin:0"><strong>Mar 9 — 1,684 msgs</strong><br><span style="font-size:10px;color:var(--muted)">Post-boards surge — celebration mode.</span></div>
+      <div class="insight" style="--i-color:var(--muted);margin:0"><strong>Apr — group winding down</strong><br><span style="font-size:10px;color:var(--muted)">Activity drops sharply. Life after boards.</span></div>
+    </div>
+  </div>
+</section>
+
 
 <script>
 // ═══════════════════════════════════════════
@@ -661,71 +715,113 @@ section.visible { display: block; animation: fadeUp 0.4s ease; }
 const MEMBERS = ["Siyona","Vihaan Shukla","Nishchay Sinha","Ambikesh","Mudit Agarwal","Yadvi Gupta","Tanishka Renjith"];
 const SHORT = {"Siyona":"Siyona","Vihaan Shukla":"Vihaan","Nishchay Sinha":"Nishchay","Ambikesh":"Ambikesh","Mudit Agarwal":"Mudit","Yadvi Gupta":"Yadvi","Tanishka Renjith":"Tanishka"};
 const ACCENTS = {"Siyona":"#ff3c6e","Vihaan Shukla":"#00e0ff","Nishchay Sinha":"#ffc400","Ambikesh":"#b388ff","Mudit Agarwal":"#00e676","Yadvi Gupta":"#ff7043","Tanishka Renjith":"#f48fb1"};
-const TOTAL = 64258;
+const TOTAL = 73710;
 
 const PERSON_DATA = {
-  "Siyona":       {total:13057,hours:{"9":44,"13":819,"14":1084,"15":1123,"16":771,"18":893,"19":1035,"20":1004,"21":1164,"22":1114,"23":999,"0":499,"11":470,"12":793,"10":171,"17":633,"3":30,"4":15,"5":2,"7":23,"8":34,"1":188,"6":29,"2":120},days:{"3":1949,"4":1894,"5":1385,"6":1891,"0":2395,"1":1884,"2":1659},words:[["all",164],["mere",153],["dont",153],["sahi",145],["cause",142],["log",136],["thats",134],["bohot",122],["arrey",120],["rahe",119],["kaha",114],["renjith",106],["dekh",105],["ill",105],["gupta",101]],avg_len:5.9,media:383,edits:90,monthly:{"2025-12":3656,"2026-01":2125,"2026-02":5719,"2026-03":1557},peak_hour:[21,1164],emoji_pct:6.7},
-  "Vihaan Shukla":{total:12890,hours:{"12":613,"14":916,"15":996,"16":1100,"19":1191,"20":1187,"0":115,"9":115,"10":314,"11":232,"13":938,"17":833,"22":967,"23":527,"4":5,"18":1128,"21":1359,"2":264,"1":57,"8":17,"5":2,"7":2,"3":12},days:{"1":1984,"2":1281,"3":2002,"4":1963,"5":1441,"6":1753,"0":2466},words:[["too",181],["sinha",162],["agarwal",145],["one",134],["she",126],["how",124],["all",117],["yuh",112],["vro",109],["btw",105],["did",101],["only",101],["yeah",98],["even",97],["right",95]],avg_len:3.6,media:519,edits:189,monthly:{"2026-01":1896,"2026-02":8922,"2026-03":2072},peak_hour:[21,1359],emoji_pct:2.3},
-  "Nishchay Sinha":{total:12475,hours:{"9":55,"10":190,"11":339,"14":880,"15":1053,"16":1274,"18":904,"20":825,"21":1115,"22":1117,"23":946,"6":2,"12":629,"13":946,"17":682,"19":888,"0":369,"1":156,"7":10,"8":9,"2":86},days:{"3":1778,"4":1901,"5":1512,"6":1939,"0":2107,"1":1910,"2":1328},words:[["cuz",193],["rha",158],["all",130],["renjith",125],["dont",115],["one",111],["thats",109],["got",104],["out",97],["how",95],["too",93],["get",88],["kyu",86],["gya",85],["agarwal",84]],avg_len:4.7,media:212,edits:120,monthly:{"2025-12":2574,"2026-01":2311,"2026-02":6315,"2026-03":1275},peak_hour:[16,1274],emoji_pct:3.1},
-  "Ambikesh":     {total:10753,hours:{"10":247,"11":532,"13":593,"14":1107,"15":1067,"16":728,"18":649,"19":1137,"20":1041,"22":518,"23":664,"8":25,"12":868,"21":589,"17":494,"9":102,"0":205,"7":21,"1":104,"2":40,"6":22},days:{"3":2022,"4":1416,"5":1244,"6":1649,"0":1731,"1":1329,"2":1362},words:[["hun",256],["hota",161],["bol",135],["bohot",132],["rahe",126],["mere",114],["wala",110],["paagal",102],["kyu",97],["one",93],["zyada",91],["aisa",91],["log",91],["kaise",89],["kaha",85]],avg_len:6.0,media:69,edits:214,monthly:{"2025-12":3209,"2026-01":1957,"2026-02":4583,"2026-03":1004},peak_hour:[19,1137],emoji_pct:4.1},
-  "Mudit Agarwal":{total:7405,hours:{"10":96,"11":137,"14":360,"15":481,"20":574,"21":887,"22":805,"23":541,"12":297,"13":328,"0":281,"17":403,"19":660,"16":540,"9":22,"18":636,"8":11,"1":140,"3":5,"6":1,"2":193,"7":7},days:{"3":1227,"4":1076,"5":736,"6":1185,"0":1202,"1":1274,"2":705},words:[["mein",129],["tho",111],["one",84],["all",75],["too",73],["right",65],["time",60],["alr",59],["how",58],["https",54],["don",53],["cuz",51],["sure",50],["aaja",50],["than",49]],avg_len:3.7,media:218,edits:147,monthly:{"2025-12":1338,"2026-01":1476,"2026-02":3739,"2026-03":852},peak_hour:[21,887],emoji_pct:0.6},
-  "Yadvi Gupta":  {total:6343,hours:{"10":228,"11":403,"13":516,"14":439,"15":450,"16":435,"17":274,"22":566,"23":450,"0":208,"12":560,"18":483,"19":486,"20":327,"21":363,"9":92,"3":12,"4":10,"8":2,"1":38,"2":1},days:{"3":1010,"4":1038,"5":744,"6":1056,"0":920,"1":898,"2":677},words:[["rhi",232],["mene",156],["rha",131],["abh",99],["gya",97],["gyi",81],["rhe",75],["aaj",72],["mere",70],["bol",68],["dekh",63],["https",62],["hota",61],["meri",58],["merko",57]],avg_len:4.5,media:110,edits:50,monthly:{"2025-12":2215,"2026-01":1267,"2026-02":2393,"2026-03":468},peak_hour:[22,566],emoji_pct:5.5},
-  "Tanishka Renjith":{total:941,hours:{"10":74,"14":58,"15":137,"20":81,"23":71,"0":29,"11":114,"12":75,"18":42,"21":53,"13":46,"16":31,"19":63,"22":40,"17":14,"9":7,"8":5,"7":1},days:{"3":285,"4":193,"5":86,"6":109,"0":56,"1":125,"2":87},words:[["terko",44],["tikhe",34],["bolo",32],["meko",30],["brother",27],["don",26],["bol",26],["rahe",24],["hum",24],["meri",22],["bacchi",22],["rhi",22],["log",22],["kyu",20],["mat",19]],avg_len:5.4,media:4,edits:149,monthly:{"2025-12":564,"2026-01":163,"2026-02":151,"2026-03":63},peak_hour:[15,137],emoji_pct:0.0}
+  "Siyona":          {total:14549,pct:19.8,peak_hour:21,peak_day:"Mon",media:407, edits:100,avg_len:6.0,emoji_pct:6.8,tagline:"The Backbone",
+    hours:[530,194,120,30,15,2,30,23,46,86,180,477,827,930,1231,1216,836,690,1000,1180,1242,1324,1290,1050],
+    days:[2653,2030,1958,1974,2148,1667,2119],
+    monthly:[3656,2125,5719,2413,636],
+    words:[["thats",163],["cause",163],["bro",98],["yup",69],["omg",58],["sahi",52],["dont",49],["ik",35],["idk",30],["wtf",27],["rn",20],["ikr",12],["fr",15],["based",8],["nah",10]],
+    roast:"Sent 14,549 messages and still had time to ask 'why is nobody talking'. The group's unofficial mom, therapist, and chaos coordinator — often simultaneously. Calls people by last name like a teacher.",
+    tagline_full:"The Backbone · Group's main character 👑"},
+  "Vihaan Shukla":   {total:15757,pct:21.5,peak_hour:21,peak_day:"Mon",media:666, edits:209,avg_len:3.7,emoji_pct:2.2,tagline:"The Media Lord",
+    hours:[150,57,264,12,5,2,0,3,33,137,356,323,780,1142,1095,1146,1293,991,1384,1374,1576,1590,1310,734],
+    days:[3061,2359,1763,2144,2222,1828,2380],
+    monthly:[0,1896,8922,4161,778],
+    words:[["fr",273],["ngl",154],["agarwal",182],["btw",137],["lwk",129],["yuh",128],["nah",111],["highkey",97],["ain",77],["ik",63],["bro",60],["tbh",30],["bruh",28],["smh",14],["yesh",50]],
+    roast:"666 media files — literally. Didn't exist in December 2025, then exploded with 8,922 messages in February alone. Uses 'fr' 273 times. The sole n-word user in the group. Short, chaotic, mostly vibes.",
+    tagline_full:"The Media Lord · 666 media files 📸"},
+  "Nishchay Sinha":  {total:14162,pct:19.3,peak_hour:16,peak_day:"Mon",media:232, edits:131,avg_len:4.7,emoji_pct:3.8,tagline:"The Afternoon Menace",
+    hours:[373,162,86,0,0,0,2,14,9,61,211,368,719,1045,1022,1145,1391,782,1043,984,942,1385,1375,1043],
+    days:[2389,2113,1647,1834,2059,1771,2349],
+    monthly:[2574,2311,6315,2557,405],
+    words:[["cuz",213],["bro",263],["thats",123],["fr",84],["ngl",75],["ive",61],["nah",58],["hes",50],["shes",48],["bruh",47],["ikr",46],["idk",32],["lmao",24],["lol",18],["tbh",18]],
+    roast:"The only person whose peak hour is 4 PM. While everyone else naps, Nishchay sends paragraphs about nothing. Said 'bro' 263 times and 'cuz' 213 times. Mentions Nishchay's secret: he's basically American-coded.",
+    tagline_full:"The Afternoon Menace · Peak hour: 4 PM 🕓"},
+  "Ambikesh":        {total:12287,pct:16.8,peak_hour:19,peak_day:"Mon",media:82,  edits:259,avg_len:5.7,emoji_pct:4.0,tagline:"The Editor",
+    hours:[261,107,40,0,0,0,22,21,25,113,282,584,963,663,1200,1123,805,602,807,1389,1232,686,582,780],
+    days:[2203,1447,1618,2098,1548,1376,1997],
+    monthly:[3209,1957,4583,2120,418],
+    words:[["fr",223],["kon",87],["aya",86],["lekin",82],["thats",78],["frfr",76],["bro",74],["ik",68],["mitr",47],["idk",46],["lol",34],["btw",30],["hojaega",43],["terko",83],["jaega",46]],
+    roast:"259 edits — every second message regretted and revised. Said 'nhi' 1,450 times, 'paagal' 118 times. In permanent disagreement. Fewest media (82). Said 'frfr' 76 times unironically.",
+    tagline_full:"The Editor · 259 edits, most of anyone ✏️"},
+  "Mudit Agarwal":   {total:8801, pct:12.0,peak_hour:22,peak_day:"Mon",media:231, edits:168,avg_len:3.8,emoji_pct:0.7,tagline:"The Emoji-phobe",
+    hours:[288,145,193,5,0,2,1,7,13,37,98,159,315,402,403,549,615,479,884,861,719,989,1037,600],
+    days:[1774,1453,908,1233,1198,840,1395],
+    monthly:[1338,1476,3739,1924,324],
+    words:[["mein",149],["alr",61],["cuz",58],["yep",41],["nah",33],["rn",32],["tbh",26],["fr",25],["based",18],["idk",18],["thats",17],["fs",47],["probably",58],["sure",60],["right",78]],
+    roast:"Lowest emoji usage at 0.7%. Communicates like a 1920 telegram. Brotherzoned by Tanishka. Top TF-IDF word is 'mein' (149×). His most positive sentiment in the group doesn't match his robot energy.",
+    tagline_full:"The Emoji-phobe · 0.7% emoji usage 🚫"},
+  "Yadvi Gupta":     {total:6724, pct:9.2, peak_hour:22,peak_day:"Sun",media:111, edits:51, avg_len:4.6,emoji_pct:5.6,tagline:"The Night Owl",
+    hours:[208,38,1,12,10,0,0,0,5,116,229,438,601,522,469,457,444,289,510,503,340,449,630,453],
+    days:[972,972,743,1017,1077,799,1144],
+    monthly:[2215,1267,2393,802,47],
+    words:[["bro",60],["pehele",53],["krna",49],["aya",43],["krne",38],["gye",38],["krke",28],["kon",24],["nah",20],["ik",20],["idk",14],["omg",11],["btw",7],["tbh",7],["wtf",5]],
+    roast:"Created this group then went progressively quieter. 47% of her swearing is just 'bc'. Active until 10 PM. All her top words are phonetic Hindi verbs — she does things, others just talk.",
+    tagline_full:"The Night Owl · Peak at 10 PM · Created the group 🌙"},
+  "Tanishka Renjith": {total:1023, pct:1.4, peak_hour:15,peak_day:"Thu",media:4,   edits:162,avg_len:4.8,emoji_pct:0.1,tagline:"The Ghost",
+    hours:[30,0,0,0,0,0,0,1,5,7,74,114,75,46,71,146,33,30,49,66,91,70,43,72],
+    days:[56,142,113,285,193,95,139],
+    monthly:[564,163,151,144,1],
+    words:[["tikhe",34],["meko",31],["bacchi",26],["terko",48],["pranipaat",14],["kon",11],["don",26],["bol",26],["brother",27],["bich",9],["ese",15],["bhag",4],["chise",8],["baccho",15],["mein",1]],
+    roast:"1,023 messages across 134 days. 162 edits. 0.1% emojis. 0 swear words. Tanishka exists the way a shadow does — technically present, functionally absent, and somehow the person everyone is most obsessed with.",
+    tagline_full:"The Ghost · 1,023 msgs in 134 days 👻"}
 };
 
-const HOUR_DATA = {0:1706,1:683,2:704,3:59,4:30,5:4,6:54,7:64,8:103,9:438,10:1338,11:2227,12:3892,13:4214,14:4855,15:5326,16:4897,17:3334,18:4740,19:5503,20:5072,21:5660,22:5157,23:4198};
-const WEEKDAY_DATA = [{l:"Mon",v:10933},{l:"Tue",v:9485},{l:"Wed",v:7157},{l:"Thu",v:10335},{l:"Fri",v:9590},{l:"Sat",v:7160},{l:"Sun",v:9598}];
-const MONTH_DATA = [{l:"Dec'25",v:13602},{l:"Jan'26",v:11323},{l:"Feb'26",v:31987},{l:"Mar'26",v:7346}];
-const TOP_WORDS = [["mai",1533],["nahi",1524],["bhai",904],["woh",785],["kuch",752],["abhi",655],["same",555],["good",541],["bro",495],["why",467],["baat",505],["koi",584],["raha",667],["pata",508],["fir",476],["sab",784]];
+const HOUR_DATA = {0:1840,1:703,2:704,3:59,4:30,5:6,6:55,7:69,8:136,9:557,10:1630,11:2577,12:4361,13:4848,14:5519,15:5872,16:5577,17:3823,18:5449,19:5858,20:5882,21:6457,22:5782,23:4733};
+const WEEKDAY_DATA = [{l:"Mon",v:12908},{l:"Tue",v:10516},{l:"Wed",v:8350},{l:"Thu",v:11485},{l:"Fri",v:10444},{l:"Sat",v:8376},{l:"Sun",v:11631}];
+const MONTH_DATA = [{l:"Dec'25",v:13602},{l:"Jan'26",v:11323},{l:"Feb'26",v:31987},{l:"Mar'26",v:13346},{l:"Apr'26",v:2609}];
+const TOP_WORDS = [["mai",1821],["nahi",1750],["bhai",1063],["woh",921],["kuch",882],["abhi",762],["same",641],["good",621],["bro",660],["why",547],["baat",580],["koi",691],["raha",791],["pata",601],["fir",561],["sab",921]];
 
 const SLANG_DATA = {
-  "Siyona":       {total:402, words:[["bro",83],["yup",66],["omg",48],["ik",31],["idk",23],["wtf",17],["rn",16],["damn",15],["fr",10],["ikr",9],["nah",7],["based",7],["bruh",6],["ngl",6],["lol",5]]},
-  "Vihaan Shukla":{total:1005,words:[["fr",254],["ngl",137],["btw",105],["nah",94],["bro",56],["highkey",56],["ik",49],["damn",36],["tbh",27],["bruh",27],["lowkey",26],["rn",16],["fs",16],["yep",14],["smh",13]]},
-  "Nishchay Sinha":{total:723,words:[["bro",230],["fr",81],["ngl",69],["nah",50],["bruh",41],["ikr",39],["idk",26],["rn",25],["lmao",23],["lol",17],["damn",17],["tbh",17],["smh",11],["imo",7],["fire",6]]},
-  "Ambikesh":     {total:534, words:[["fr",190],["bro",60],["ik",53],["idk",42],["lol",34],["btw",22],["tbh",20],["ikr",18],["fs",18],["ngl",15],["bruh",14],["rn",14],["based",4],["wtf",4],["damn",3]]},
-  "Mudit Agarwal":{total:298, words:[["fs",45],["yep",40],["nah",31],["rn",29],["fr",24],["tbh",24],["ik",16],["based",15],["mid",14],["btw",13],["idk",13],["bro",7],["ngl",6],["rizz",4],["wtf",4]]},
-  "Yadvi Gupta":  {total:143, words:[["bro",56],["nah",19],["ik",18],["idk",13],["omg",10],["btw",6],["tbh",6],["wtf",5],["fs",4],["fire",4],["based",2]]},
-  "Tanishka Renjith":{total:0,words:[]}
+  "Siyona":          {total:676, words:[["thats",144],["bro",98],["yup",69],["omg",58],["ik",35],["idk",30],["wtf",27],["ive",26],["shes",22],["rn",20],["damn",18],["fr",15],["ikr",12],["based",8],["nah",10]]},
+  "Vihaan Shukla":   {total:1599,words:[["fr",273],["ngl",154],["btw",137],["lwk",129],["yuh",128],["nah",111],["highkey",97],["ain",77],["ik",63],["bro",60],["damn",43],["tbh",30],["bruh",28],["yesh",50],["smh",14]]},
+  "Nishchay Sinha":  {total:1308,words:[["bro",263],["cuz",213],["thats",123],["fr",84],["ngl",75],["ive",61],["nah",58],["hes",50],["shes",48],["bruh",47],["ikr",46],["idk",32],["lmao",24],["lol",18],["tbh",18]]},
+  "Ambikesh":        {total:1122,words:[["fr",223],["kon",87],["aya",86],["lekin",82],["thats",78],["frfr",76],["bro",74],["ik",68],["mitr",47],["idk",46],["lol",34],["btw",30],["terko",83],["hojaega",43],["jaega",46]]},
+  "Mudit Agarwal":   {total:623, words:[["mein",149],["alr",61],["cuz",58],["fs",47],["yep",41],["nah",33],["rn",32],["tbh",26],["fr",25],["based",18],["idk",18],["thats",17],["probably",58],["sure",60],["right",78]]},
+  "Yadvi Gupta":     {total:453, words:[["bro",60],["pehele",53],["krna",49],["aya",43],["krne",38],["gye",38],["krke",28],["kon",24],["nah",20],["ik",20],["idk",14],["omg",11],["btw",7],["tbh",7],["wtf",5]]},
+  "Tanishka Renjith":{total:117, words:[["tikhe",34],["meko",31],["bacchi",26],["pranipaat",14],["kon",11],["terko",48]]}
 };
 
 const SENT_DATA = {
-  "Siyona":       {pos:12.7,neg:13.6,neu:73.8,top_pos:[["yes",286],["yaar",265],["sahi",145],["bohot",122],["arrey",120]],top_neg:[["nahi",1123],["no",214],["kyu",100],["sorry",82],["paagal",75]]},
-  "Vihaan Shukla":{pos:5.0, neg:6.6, neu:88.4,top_pos:[["good",112],["right",95],["yes",78],["true",69],["nice",42]],top_neg:[["nahi",214],["no",189],["kyu",48],["bad",48],["never",44]]},
-  "Nishchay Sinha":{pos:7.3,neg:9.7, neu:83.1,top_pos:[["yes",159],["good",156],["right",55],["nice",45],["yay",41]],top_neg:[["nhi",469],["no",171],["kyu",86],["shit",70],["hell",38]]},
-  "Ambikesh":     {pos:6.6, neg:16.9,neu:76.4,top_pos:[["bohot",132],["yes",127],["nice",84],["yaar",71],["sahi",68]],top_neg:[["nhi",1272],["no",159],["paagal",102],["kyu",97],["mat",66]]},
-  "Mudit Agarwal":{pos:10.1,neg:7.5, neu:82.3,top_pos:[["yes",191],["good",140],["right",65],["sure",50],["yep",40]],top_neg:[["no",170],["nahi",142],["mat",30],["hell",27],["bad",23]]},
-  "Yadvi Gupta":  {pos:6.6, neg:13.2,neu:80.2,top_pos:[["yaar",78],["yes",58],["bohot",52],["sahi",51],["acha",39]],top_neg:[["nhi",652],["no",37],["mat",36],["shut",23],["bekar",16]]},
-  "Tanishka Renjith":{pos:8.0,neg:4.3,neu:87.8,top_pos:[["yaar",29],["acha",17],["sahi",14],["bohot",12],["true",3]],top_neg:[["kyu",20],["mat",19],["dikkat",3],["paagal",1]]}
+  "Siyona":          {pos:7.8, neg:12.4,neu:79.8,top_pos:[["yes",310],["yaar",280],["sahi",162],["bohot",138],["arrey",130]],top_neg:[["nahi",1280],["no",240],["kyu",118],["sorry",95],["paagal",88]]},
+  "Vihaan Shukla":   {pos:3.6, neg:4.9, neu:91.5,top_pos:[["good",145],["right",120],["yes",95],["true",82],["nice",55]], top_neg:[["nahi",260],["no",225],["kyu",58],["bad",56],["never",52]]},
+  "Nishchay Sinha":  {pos:5.0, neg:7.6, neu:87.4,top_pos:[["yes",185],["good",178],["right",65],["nice",54],["best",50]], top_neg:[["nhi",540],["no",198],["kyu",100],["shit",74],["hell",44]]},
+  "Ambikesh":        {pos:4.6, neg:15.1,neu:80.3,top_pos:[["bohot",155],["yes",148],["nice",98],["yaar",84],["sahi",79]], top_neg:[["nhi",1450],["no",185],["paagal",118],["kyu",112],["mat",78]]},
+  "Mudit Agarwal":   {pos:7.6, neg:6.2, neu:86.2,top_pos:[["yes",220],["good",165],["right",78],["sure",60],["yep",82]], top_neg:[["no",198],["nahi",168],["mat",36],["hell",30],["bad",28]]},
+  "Yadvi Gupta":     {pos:3.8, neg:13.0,neu:83.2,top_pos:[["yaar",90],["yes",68],["bohot",62],["sahi",59],["acha",46]], top_neg:[["nhi",745],["no",44],["mat",42],["shut",27],["bekar",20]]},
+  "Tanishka Renjith":{pos:3.4, neg:4.1, neu:92.5,top_pos:[["yaar",32],["acha",20],["sahi",16],["bohot",14],["true",4]], top_neg:[["kyu",22],["mat",21],["dikkat",4],["paagal",2]]}
 };
 
 const MENTION_DATA = {
-  "Siyona":         {"Vihaan Shukla":98,"Nishchay Sinha":265,"Ambikesh":107,"Mudit Agarwal":213,"Yadvi Gupta":295,"Tanishka Renjith":286},
-  "Vihaan Shukla":  {"Siyona":124,"Nishchay Sinha":368,"Ambikesh":73,"Mudit Agarwal":332,"Yadvi Gupta":102,"Tanishka Renjith":69},
-  "Nishchay Sinha": {"Siyona":119,"Vihaan Shukla":143,"Ambikesh":57,"Mudit Agarwal":267,"Yadvi Gupta":128,"Tanishka Renjith":286},
-  "Ambikesh":       {"Siyona":115,"Vihaan Shukla":82,"Nishchay Sinha":181,"Mudit Agarwal":179,"Yadvi Gupta":103,"Tanishka Renjith":117},
-  "Mudit Agarwal":  {"Siyona":38,"Vihaan Shukla":62,"Nishchay Sinha":89,"Ambikesh":16,"Yadvi Gupta":50,"Tanishka Renjith":33},
-  "Yadvi Gupta":    {"Siyona":97,"Vihaan Shukla":15,"Nishchay Sinha":88,"Ambikesh":27,"Mudit Agarwal":70,"Tanishka Renjith":138},
-  "Tanishka Renjith":{"Nishchay Sinha":10,"Ambikesh":2,"Yadvi Gupta":1}
+  "Siyona":          {"Vihaan Shukla":105,"Nishchay Sinha":408,"Ambikesh":156,"Mudit Agarwal":169,"Yadvi Gupta":223,"Tanishka Renjith":219},
+  "Vihaan Shukla":   {"Siyona":190,"Nishchay Sinha":382,"Ambikesh":95,"Mudit Agarwal":238,"Yadvi Gupta":79,"Tanishka Renjith":84},
+  "Nishchay Sinha":  {"Siyona":141,"Vihaan Shukla":123,"Ambikesh":83,"Mudit Agarwal":196,"Yadvi Gupta":91,"Tanishka Renjith":106},
+  "Ambikesh":        {"Siyona":130,"Vihaan Shukla":73,"Nishchay Sinha":226,"Mudit Agarwal":135,"Yadvi Gupta":72,"Tanishka Renjith":89},
+  "Mudit Agarwal":   {"Siyona":48,"Vihaan Shukla":42,"Nishchay Sinha":84,"Ambikesh":24,"Yadvi Gupta":47,"Tanishka Renjith":28},
+  "Yadvi Gupta":     {"Siyona":111,"Vihaan Shukla":15,"Nishchay Sinha":129,"Ambikesh":31,"Mudit Agarwal":50,"Tanishka Renjith":96},
+  "Tanishka Renjith":{"Siyona":0,"Vihaan Shukla":0,"Nishchay Sinha":12,"Ambikesh":2,"Mudit Agarwal":0,"Yadvi Gupta":2}
 };
 
 const TAGLINES = {
   "Siyona":"The Backbone · Group's main character 👑",
-  "Vihaan Shukla":"The Media Lord · Sends pics, barely texts 📸",
+  "Vihaan Shukla":"The Media Lord · 666 media files 📸",
   "Nishchay Sinha":"The Afternoon Menace · Peak hour: 4 PM 🕓",
-  "Ambikesh":"The Editor · 214 edits, most of anyone ✏️",
-  "Mudit Agarwal":"The Emoji-phobe · 0.6% emoji usage 🚫",
-  "Yadvi Gupta":"The Night Owl · Peak at 10 PM 🌙",
-  "Tanishka Renjith":"The Ghost · 941 messages in 87 days 👻"
+  "Ambikesh":"The Editor · 259 edits, most of anyone ✏️",
+  "Mudit Agarwal":"The Emoji-phobe · 0.7% emoji usage 🚫",
+  "Yadvi Gupta":"The Night Owl · Created the group 🌙",
+  "Tanishka Renjith":"The Ghost · 1,023 msgs in 134 days 👻"
 };
 
 const ROASTS = {
-  "Siyona":"<strong>Siyona</strong> is the group's load-bearing wall. 1 in 5 messages is hers. She peaks 9–10 PM, most active Mondays. She says <em>renjith</em> 106 times and <em>gupta</em> 101 times — calls people by last name like a teacher.",
-  "Vihaan Shukla":"<strong>Vihaan</strong> sent <strong>519 media files</strong>, the most of anyone. Didn't exist in December 2025, then sent 8,922 messages in February alone. Uses <em>\"fr\"</em> 254 times — more than anyone. Short, chaotic, mostly images.",
-  "Nishchay Sinha":"<strong>Nishchay</strong> is the afternoon warrior — peaks at <strong>4 PM</strong> while everyone else is at 9–10 PM. Says <em>\"bro\"</em> 230 times. Mentioned Tanishka 286 times. His entire personality is calling people bro.",
-  "Ambikesh":"<strong>Ambikesh</strong> has 214 edits — the absolute most. He calls people <em>\"paagal\"</em> 102 times and said <em>\"nhi\"</em> 1,272 times. He's in a permanent state of disagreement. Fewest media (69) — prefers angry words.",
-  "Mudit Agarwal":"<strong>Mudit</strong> uses emojis only <strong>0.6%</strong> of the time. Practically a robot. Says <em>\"alr\"</em> and shares links (<em>https</em> 54 times). But surprisingly the most positive member by sentiment.",
-  "Yadvi Gupta":"<strong>Yadvi</strong> <em>created this group</em> and then typed <em>\"rhi\"</em> 232 times. All her top words are phonetic Hindi. She started everything, then quietly faded — messaging dropped sharply after January.",
-  "Tanishka Renjith":"<strong>Tanishka</strong> is the ghost. 941 messages vs Siyona's 13,057. But her <strong>edit rate is 15.8%</strong> — highest by far. She agonises over every message, barely shows up, and sends zero emojis. She talks TO people not about them."
+  "Siyona":"<strong>Siyona</strong> is the group's load-bearing wall. 1 in 5 messages is hers. Peaks 9–10 PM, most active Mondays. 407 media files. The group's unofficial mom, therapist, and chaos coordinator.",
+  "Vihaan Shukla":"<strong>Vihaan</strong> sent <strong>666 media files</strong> (literally). Didn't exist in Dec 2025, then sent 8,922 messages in February alone. Uses <em>'fr'</em> 273 times. The sole n-word user in the group. Short, chaotic, mostly vibes.",
+  "Nishchay Sinha":"<strong>Nishchay</strong> is the afternoon warrior — peaks at <strong>4 PM</strong> while everyone else is at 9–10 PM. Says <em>'bro'</em> 263 times and <em>'cuz'</em> 213 times. Mentioned Tanishka 106 times. American-coded.",
+  "Ambikesh":"<strong>Ambikesh</strong> has <strong>259 edits</strong> — the absolute most. Called people <em>'paagal'</em> 118 times and said <em>'nhi'</em> 1,450 times. Permanent disagreement mode. Said 'frfr' 76 times unironically.",
+  "Mudit Agarwal":"<strong>Mudit</strong> uses emojis only <strong>0.7%</strong> of the time. Practically a robot. Top word is <em>'mein'</em> (149×). Brotherzoned by Tanishka. Has a crush named Lasya he insists was 'just thrice'.",
+  "Yadvi Gupta":"<strong>Yadvi</strong> <em>created this group</em> and then typed phonetic Hindi verbs 500 times. 47% of her swearing is just 'bc'. Started everything, went increasingly quiet after January.",
+  "Tanishka Renjith":"<strong>Tanishka</strong> is the ghost. 1,023 messages vs Vihaan's 15,757. <strong>Edit rate 15.8%</strong> — highest by far. 0 swear words. 0 emojis. The group is collectively obsessed with her and she doesn't notice."
 };
 
 // ═══════════════════════════════════════════
@@ -986,40 +1082,40 @@ function buildMembers() {
 // DEEP DIVE DATA
 // ═══════════════════════════════════════════
 const SLANG_DATA_DD = {
-  "Siyona":        {total:402, words:[["bro",83],["yup",66],["omg",48],["ik",31],["idk",23],["wtf",17],["rn",16],["damn",15],["fr",10],["ikr",9],["nah",7],["based",7],["bruh",6],["ngl",6],["lol",5]]},
-  "Vihaan Shukla": {total:1005,words:[["fr",254],["ngl",137],["btw",105],["nah",94],["bro",56],["highkey",56],["ik",49],["damn",36],["tbh",27],["bruh",27],["lowkey",26],["rn",16],["fs",16],["yep",14],["smh",13]]},
-  "Nishchay Sinha":{total:723, words:[["bro",230],["fr",81],["ngl",69],["nah",50],["bruh",41],["ikr",39],["idk",26],["rn",25],["lmao",23],["lol",17],["damn",17],["tbh",17],["smh",11],["imo",7],["fire",6]]},
-  "Ambikesh":      {total:534, words:[["fr",190],["bro",60],["ik",53],["idk",42],["lol",34],["btw",22],["tbh",20],["ikr",18],["fs",18],["ngl",15],["bruh",14],["rn",14],["based",4],["wtf",4],["damn",3]]},
-  "Mudit Agarwal": {total:298, words:[["fs",45],["yep",40],["nah",31],["rn",29],["fr",24],["tbh",24],["ik",16],["based",15],["mid",14],["btw",13],["idk",13],["bro",7],["ngl",6],["rizz",4],["wtf",4]]},
-  "Yadvi Gupta":   {total:143, words:[["bro",56],["nah",19],["ik",18],["idk",13],["omg",10],["btw",6],["tbh",6],["wtf",5],["fs",4],["fire",4],["based",2]]},
-  "Tanishka Renjith":{total:0, words:[]}
+  "Siyona":          {total:676, words:[["thats",144],["bro",98],["yup",69],["omg",58],["ik",35],["idk",30],["wtf",27],["ive",26],["shes",22],["rn",20],["damn",18],["fr",15],["ikr",12],["based",8],["nah",10]]},
+  "Vihaan Shukla":   {total:1599,words:[["fr",273],["ngl",154],["btw",137],["lwk",129],["yuh",128],["nah",111],["highkey",97],["ain",77],["ik",63],["bro",60],["damn",43],["tbh",30],["bruh",28],["yesh",50],["smh",14]]},
+  "Nishchay Sinha":  {total:1308,words:[["bro",263],["cuz",213],["thats",123],["fr",84],["ngl",75],["ive",61],["nah",58],["hes",50],["shes",48],["bruh",47],["ikr",46],["idk",32],["lmao",24],["lol",18],["tbh",18]]},
+  "Ambikesh":        {total:1122,words:[["fr",223],["kon",87],["aya",86],["lekin",82],["thats",78],["frfr",76],["bro",74],["ik",68],["mitr",47],["idk",46],["lol",34],["btw",30],["terko",83],["hojaega",43],["jaega",46]]},
+  "Mudit Agarwal":   {total:623, words:[["mein",149],["alr",61],["cuz",58],["fs",47],["yep",41],["nah",33],["rn",32],["tbh",26],["fr",25],["based",18],["idk",18],["thats",17],["probably",58],["sure",60],["right",78]]},
+  "Yadvi Gupta":     {total:453, words:[["bro",60],["pehele",53],["krna",49],["aya",43],["krne",38],["gye",38],["krke",28],["kon",24],["nah",20],["ik",20],["idk",14],["omg",11],["btw",7],["tbh",7],["wtf",5]]},
+  "Tanishka Renjith":{total:117, words:[["tikhe",34],["meko",31],["bacchi",26],["pranipaat",14],["kon",11],["terko",48]]}
 };
 const SWEAR_DATA_DD = {
-  "Siyona":        {mild_total:76, mild_words:[["wtf",17],["hell",15],["damn",15],["ass",13],["dumb",7],["idiot",5],["stupid",3],["crap",1]], mod_total:129, mod_words:[["shit",42],["bc",35],["bitch",21],["shits",13],["fuck",7],["gadhe",3],["gadha",1],["bitches",1]], int_total:8,  int_words:[["retard",4],["mc",1],["chutiya",1],["stfu",1],["retarded",1]], grand_total:213},
-  "Vihaan Shukla": {mild_total:89, mild_words:[["damn",36],["hell",25],["ass",11],["wtf",9],["dumb",3],["trash",2],["crap",2],["stupid",1]], mod_total:73,  mod_words:[["fuck",28],["shit",25],["bc",8],["fucking",6],["shitty",3],["bullshit",2],["bitch",1]], int_total:14, int_words:[["retard",5],["retarded",3],["bsdk",2],["mc",2],["dick",1],["stfu",1]], grand_total:176},
-  "Nishchay Sinha":{mild_total:86, mild_words:[["hell",38],["ass",19],["damn",17],["crap",4],["dumb",3],["trash",3],["idiot",1],["stupid",1]], mod_total:87, mod_words:[["shit",70],["shits",11],["bc",3],["kutta",1],["gadhe",1],["bitch",1]], int_total:4, int_words:[["cock",2],["retarded",1],["stfu",1]], grand_total:177},
-  "Ambikesh":      {mild_total:34, mild_words:[["hell",13],["dumb",12],["wtf",4],["damn",3],["stupid",1],["idiot",1]], mod_total:52, mod_words:[["shit",18],["bakwaas",12],["bc",9],["saala",3],["fuck",3],["gadhe",2],["gadha",1],["bitches",1]], int_total:5, int_words:[["stfu",1],["retarded",1],["retard",1],["dick",1],["cock",1]], grand_total:91},
-  "Mudit Agarwal": {mild_total:50, mild_words:[["hell",27],["dumb",7],["ass",4],["wtf",4],["trash",3],["stupid",3],["idiot",2]], mod_total:26, mod_words:[["shit",11],["bc",7],["fuck",6],["shits",1],["bitch",1]], int_total:5, int_words:[["mc",3],["dick",1],["whore",1]], grand_total:81},
-  "Yadvi Gupta":   {mild_total:16, mild_words:[["wtf",5],["ass",4],["hell",4],["dumb",2],["idiot",1]], mod_total:47, mod_words:[["bc",31],["shit",11],["fuck",1],["bitching",1],["saali",1],["bitch",1],["gadhe",1]], int_total:1, int_words:[["gandu",1]], grand_total:64},
+  "Siyona":          {mild_total:104,mild_words:[["wtf",27],["hell",21],["damn",18],["ass",17],["dumb",9],["idiot",6]],mod_total:148,mod_words:[["shit",50],["bc",35],["bitch",25],["shits",16],["fuck",8],["gadhe",3]],int_total:9,int_words:[["retard",4],["mc",1],["chutiya",1],["stfu",1],["retarded",1],["piss",1]],grand_total:261},
+  "Vihaan Shukla":   {mild_total:108,mild_words:[["damn",43],["hell",32],["ass",15],["wtf",9],["crap",3],["dumb",3]],  mod_total:89, mod_words:[["shit",30],["fuck",30],["bc",8],["fucking",7],["saala",5],["shitty",3]],int_total:14,int_words:[["retard",5],["retarded",3],["bsdk",2],["mc",2],["dick",1],["stfu",1]],grand_total:211},
+  "Nishchay Sinha":  {mild_total:99, mild_words:[["hell",44],["ass",24],["damn",17],["crap",6],["dumb",3],["trash",3]], mod_total:91, mod_words:[["shit",74],["shits",11],["bc",3],["kutta",1],["gadhe",1],["bitch",1]],int_total:5,int_words:[["cock",2],["retarded",1],["stfu",1],["piss",1]],grand_total:195},
+  "Ambikesh":        {mild_total:40, mild_words:[["hell",16],["dumb",13],["wtf",5],["damn",4],["stupid",1],["idiot",1]],mod_total:62, mod_words:[["shit",24],["bakwaas",16],["bc",9],["fuck",4],["saala",3],["gadhe",2]],int_total:5,int_words:[["stfu",1],["retarded",1],["retard",1],["dick",1],["cock",1]],grand_total:107},
+  "Mudit Agarwal":   {mild_total:58, mild_words:[["hell",30],["dumb",9],["ass",6],["wtf",5],["trash",3],["stupid",3]], mod_total:36, mod_words:[["shit",17],["bc",8],["fuck",8],["bitch",2],["shits",1]],            int_total:6,int_words:[["mc",3],["dick",1],["whore",1],["piss",1]],grand_total:100},
+  "Yadvi Gupta":     {mild_total:17, mild_words:[["hell",5],["wtf",5],["ass",4],["dumb",2],["idiot",1]],               mod_total:48, mod_words:[["bc",31],["shit",12],["fuck",1],["bitching",1],["saali",1],["bitch",1]],int_total:1,int_words:[["gandu",1]],grand_total:66},
   "Tanishka Renjith":{mild_total:0,mild_words:[],mod_total:0,mod_words:[],int_total:0,int_words:[],grand_total:0}
 };
 const SENT_DATA_DD = {
-  "Siyona":        {pos:12.7,neg:13.6,neu:73.8,top_pos:[["yes",286],["yaar",265],["sahi",145],["bohot",122],["arrey",120],["theek",119],["acha",96],["exactly",95]],top_neg:[["nahi",1123],["no",214],["kyu",100],["sorry",82],["paagal",75],["aise",71],["mat",67],["nhi",56]]},
-  "Vihaan Shukla": {pos:5.0, neg:6.6, neu:88.4,top_pos:[["good",112],["right",95],["yes",78],["true",69],["nice",42],["best",32],["exactly",25],["zyada",26]],      top_neg:[["nahi",214],["no",189],["kyu",48],["bad",48],["never",44],["damn",36],["shit",25],["zyada",26]]},
-  "Nishchay Sinha":{pos:7.3, neg:9.7, neu:83.1,top_pos:[["yes",159],["good",156],["right",55],["nice",45],["best",42],["yay",41],["bohot",42],["zyada",47]],         top_neg:[["nhi",469],["no",171],["kyu",86],["shit",70],["hell",38],["aise",43],["never",33],["zyada",47]]},
-  "Ambikesh":      {pos:6.6, neg:16.9,neu:76.4,top_pos:[["bohot",132],["yes",127],["nice",84],["yaar",71],["sahi",68],["acha",61],["lol",34],["zyada",91]],          top_neg:[["nhi",1272],["no",159],["paagal",102],["kyu",97],["mat",66],["aisa",91],["issue",54],["zyada",91]]},
-  "Mudit Agarwal": {pos:10.1,neg:7.5, neu:82.3,top_pos:[["yes",191],["good",140],["right",65],["sure",50],["yep",40],["true",39],["exactly",38],["yaar",35]],        top_neg:[["no",170],["nahi",142],["mat",30],["hell",27],["bad",23],["issue",24],["kyu",15],["mid",14]]},
-  "Yadvi Gupta":   {pos:6.6, neg:13.2,neu:80.2,top_pos:[["yaar",78],["yes",58],["bohot",52],["sahi",51],["acha",39],["exactly",20],["thik",20],["zyada",28]],        top_neg:[["nhi",652],["no",37],["mat",36],["shut",23],["bekar",16],["galat",19],["kyu",25],["zyada",28]]},
-  "Tanishka Renjith":{pos:8.0,neg:4.3,neu:87.8,top_pos:[["yaar",29],["acha",17],["sahi",14],["bohot",12],["true",3],["pyaar",1],["badiya",1],["happy",1]],           top_neg:[["kyu",20],["mat",19],["dikkat",3],["paagal",1]]}
+  "Siyona":          {pos:7.8, neg:12.4,neu:79.8,top_pos:[["yes",310],["yaar",280],["sahi",162],["bohot",138],["arrey",130],["theek",125],["acha",108],["exactly",102]],top_neg:[["nahi",1280],["no",240],["kyu",118],["sorry",95],["paagal",88],["aise",80],["mat",75],["nhi",65]]},
+  "Vihaan Shukla":   {pos:3.6, neg:4.9, neu:91.5,top_pos:[["good",145],["right",120],["yes",95],["true",82],["nice",55],["best",44],["exactly",32],["zyada",30]],      top_neg:[["nahi",260],["no",225],["kyu",58],["bad",56],["never",52],["damn",43],["shit",30],["zyada",30]]},
+  "Nishchay Sinha":  {pos:5.0, neg:7.6, neu:87.4,top_pos:[["yes",185],["good",178],["right",65],["nice",54],["best",50],["yay",48],["bohot",50],["zyada",55]],         top_neg:[["nhi",540],["no",198],["kyu",100],["shit",74],["hell",44],["aise",50],["never",40],["zyada",55]]},
+  "Ambikesh":        {pos:4.6, neg:15.1,neu:80.3,top_pos:[["bohot",155],["yes",148],["nice",98],["yaar",84],["sahi",79],["acha",72],["lol",40],["zyada",105]],          top_neg:[["nhi",1450],["no",185],["paagal",118],["kyu",112],["mat",78],["aisa",105],["issue",64],["zyada",105]]},
+  "Mudit Agarwal":   {pos:7.6, neg:6.2, neu:86.2,top_pos:[["yes",220],["good",165],["right",78],["sure",60],["yep",82],["true",48],["exactly",45],["yaar",42]],        top_neg:[["no",198],["nahi",168],["mat",36],["hell",30],["bad",28],["issue",28],["kyu",18],["mid",15]]},
+  "Yadvi Gupta":     {pos:3.8, neg:13.0,neu:83.2,top_pos:[["yaar",90],["yes",68],["bohot",62],["sahi",59],["acha",46],["exactly",24],["thik",23],["zyada",32]],        top_neg:[["nhi",745],["no",44],["mat",42],["shut",27],["bekar",20],["galat",22],["kyu",29],["zyada",32]]},
+  "Tanishka Renjith":{pos:3.4, neg:4.1, neu:92.5,top_pos:[["yaar",32],["acha",20],["sahi",16],["bohot",14],["true",4],["pyaar",2],["badiya",1],["happy",1]],           top_neg:[["kyu",22],["mat",21],["dikkat",4],["paagal",2]]}
 };
 const MENTION_DATA_DD = {
-  "Siyona":          {"Vihaan Shukla":98,"Nishchay Sinha":265,"Ambikesh":107,"Mudit Agarwal":213,"Yadvi Gupta":295,"Tanishka Renjith":286},
-  "Vihaan Shukla":   {"Siyona":124,"Nishchay Sinha":368,"Ambikesh":73,"Mudit Agarwal":332,"Yadvi Gupta":102,"Tanishka Renjith":69},
-  "Nishchay Sinha":  {"Siyona":119,"Vihaan Shukla":143,"Ambikesh":57,"Mudit Agarwal":267,"Yadvi Gupta":128,"Tanishka Renjith":286},
-  "Ambikesh":        {"Siyona":115,"Vihaan Shukla":82,"Nishchay Sinha":181,"Mudit Agarwal":179,"Yadvi Gupta":103,"Tanishka Renjith":117},
-  "Mudit Agarwal":   {"Siyona":38,"Vihaan Shukla":62,"Nishchay Sinha":89,"Ambikesh":16,"Yadvi Gupta":50,"Tanishka Renjith":33},
-  "Yadvi Gupta":     {"Siyona":97,"Vihaan Shukla":15,"Nishchay Sinha":88,"Ambikesh":27,"Mudit Agarwal":70,"Tanishka Renjith":138},
-  "Tanishka Renjith":{"Nishchay Sinha":10,"Ambikesh":2,"Yadvi Gupta":1}
+  "Siyona":          {"Vihaan Shukla":105,"Nishchay Sinha":408,"Ambikesh":156,"Mudit Agarwal":169,"Yadvi Gupta":223,"Tanishka Renjith":219},
+  "Vihaan Shukla":   {"Siyona":190,"Nishchay Sinha":382,"Ambikesh":95,"Mudit Agarwal":238,"Yadvi Gupta":79,"Tanishka Renjith":84},
+  "Nishchay Sinha":  {"Siyona":141,"Vihaan Shukla":123,"Ambikesh":83,"Mudit Agarwal":196,"Yadvi Gupta":91,"Tanishka Renjith":106},
+  "Ambikesh":        {"Siyona":130,"Vihaan Shukla":73,"Nishchay Sinha":226,"Mudit Agarwal":135,"Yadvi Gupta":72,"Tanishka Renjith":89},
+  "Mudit Agarwal":   {"Siyona":48,"Vihaan Shukla":42,"Nishchay Sinha":84,"Ambikesh":24,"Yadvi Gupta":47,"Tanishka Renjith":28},
+  "Yadvi Gupta":     {"Siyona":111,"Vihaan Shukla":15,"Nishchay Sinha":129,"Ambikesh":31,"Mudit Agarwal":50,"Tanishka Renjith":96},
+  "Tanishka Renjith":{"Siyona":0,"Vihaan Shukla":0,"Nishchay Sinha":12,"Ambikesh":2,"Mudit Agarwal":0,"Yadvi Gupta":2}
 };
 
 function renderDeepDive(name, idx, accent) {
@@ -1439,74 +1535,94 @@ buildSentiment();
 buildMentions();
 buildSwearing();
 // ═══════════════════════════════════════════
-// BUILD CONTRIBUTION
+// BUILD CONTRIBUTION (Dual TF-IDF)
 // ═══════════════════════════════════════════
 function buildContribution() {
+  // Dual TF-IDF: TF × IDF_within_person × IDF_across_group
+  // IDF_within = log(1 + N_person_msgs / df_within) — rewards words concentrated vs spread
+  // IDF_cross  = log(7 / df_cross) — rewards words rare across all 7 people
+  // Score: 45% tfidf_sum + 30% total_words + 15% unique_vocab + 10% msg_count
+  const SCORES = {"Siyona":97.0,"Vihaan Shukla":83.7,"Nishchay Sinha":93.7,"Ambikesh":85.2,"Mudit Agarwal":59.0,"Yadvi Gupta":60.1,"Tanishka Renjith":24.0};
   const STATS = {
-    "Siyona":        {total_msgs:13057,total_words:75737,unique_words:9423,avg_words:6.0,media:383,long_msgs:1694,long_pct:13.4,questions:1004},
-    "Vihaan Shukla": {total_msgs:12890,total_words:46446,unique_words:7474,avg_words:3.8,media:519,long_msgs:498, long_pct:4.0, questions:1266},
-    "Nishchay Sinha":{total_msgs:12475,total_words:57894,unique_words:9011,avg_words:4.7,media:212,long_msgs:912, long_pct:7.4, questions:422},
-    "Ambikesh":      {total_msgs:10753,total_words:59820,unique_words:7978,avg_words:5.6,media:69, long_msgs:1505,long_pct:14.1,questions:1063},
-    "Mudit Agarwal": {total_msgs:7405, total_words:27334,unique_words:5157,avg_words:3.8,media:218,long_msgs:264, long_pct:3.7, questions:399},
-    "Yadvi Gupta":   {total_msgs:6343, total_words:28551,unique_words:4544,avg_words:4.6,media:110,long_msgs:412, long_pct:6.6, questions:530},
-    "Tanishka Renjith":{total_msgs:941,total_words:4535, unique_words:873, avg_words:4.8,media:4,  long_msgs:49,  long_pct:5.2, questions:0}
+    "Siyona":        {total_words:41035,unique:4182,tfidf_sum:2.5164,msgs:14549},
+    "Vihaan Shukla": {total_words:29296,unique:3304,tfidf_sum:2.6474,msgs:15757},
+    "Nishchay Sinha":{total_words:34093,unique:3995,tfidf_sum:2.6441,msgs:14162},
+    "Ambikesh":      {total_words:33701,unique:3615,tfidf_sum:2.4082,msgs:12287},
+    "Mudit Agarwal": {total_words:16939,unique:2252,tfidf_sum:1.9996,msgs:8801},
+    "Yadvi Gupta":   {total_words:14601,unique:1821,tfidf_sum:2.1566,msgs:6724},
+    "Tanishka Renjith":{total_words:2201,unique:320,tfidf_sum:1.1460,msgs:1023}
   };
-  const SCORES = {"Siyona":97.4,"Vihaan Shukla":76.8,"Nishchay Sinha":80.2,"Ambikesh":75.5,"Mudit Agarwal":44.5,"Yadvi Gupta":40.1,"Tanishka Renjith":6.2};
+  const SIG_WORDS = {
+    "Siyona":        [["isilye",0.02186,84,84],["youre",0.01592,97,93],["chodh",0.01444,50,49],["abbey",0.01285,75,75],["yup",0.01218,66,51],["zyaada",0.01198,40,40],["cause",0.00956,142,138],["smjh",0.00806,68,67],["bkl",0.00658,89,89],["accha",0.00657,53,53]],
+    "Vihaan Shukla": [["uhhhhhhhhhhhhh",0.03169,81,81],["yesh",0.01991,45,43],["yuh",0.01781,112,112],["watt",0.01531,33,33],["highkey",0.01523,56,55],["fairs",0.01336,28,28],["wdhhhhhhhhhhh",0.01257,26,26],["ain",0.01172,66,66],["lwk",0.01017,93,93],["agarwal",0.00865,145,144]],
+    "Nishchay Sinha":[["cuz",0.02198,193,191],["han",0.01140,30,30],["wthh",0.00774,32,32],["ive",0.00771,51,50],["hes",0.00706,46,46],["rhe",0.00689,74,72],["hellnawl",0.00672,16,16],["shes",0.00645,41,40],["mam",0.00603,38,38],["uhhhh",0.00588,23,23]],
+    "Ambikesh":      [["aya",0.01130,82,80],["jaega",0.00976,42,41],["terko",0.00975,68,66],["lekin",0.00912,63,63],["bje",0.00749,18,18],["mtlb",0.00738,30,30],["kon",0.00734,80,77],["mitr",0.00729,47,44],["frfr",0.00685,74,74],["hojaega",0.00660,42,41]],
+    "Mudit Agarwal": [["mein",0.02981,129,127],["alr",0.01629,59,59],["nwg",0.01626,21,21],["cuz",0.01451,51,51],["chodd",0.01365,17,17],["yep",0.01196,40,40],["probably",0.00883,46,46],["pli",0.01365,17,17],["authuser",0.01431,18,18],["asin",0.01070,9,1]],
+    "Yadvi Gupta":   [["pehele",0.02113,49,48],["krke",0.02027,27,27],["krna",0.02001,46,46],["krne",0.01682,37,37],["krte",0.01586,20,20],["gye",0.01572,34,34],["chaiye",0.01535,33,33],["ese",0.01535,33,33],["wht",0.01478,31,29],["agr",0.01383,29,29]],
+    "Tanishka Renjith":[["tikhe",0.06694,34,34],["meko",0.06125,30,30],["terko",0.05453,44,43],["ese",0.03677,15,15],["chise",0.03514,8,8],["bacchi",0.03310,22,22],["chada",0.02416,5,5],["pranipaat",0.02360,14,14],["baccho",0.02360,14,14],["bhag",0.02016,4,4]]
+  };
 
-  // Score cards
   const sorted = [...MEMBERS].sort((a,b)=>SCORES[b]-SCORES[a]);
   const medals = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣'];
-  document.getElementById('contrib-score-cards').innerHTML = sorted.map((m,i) => `
-    <div style="background:var(--s1);border:1px solid var(--border);border-top:2px solid ${ACCENTS[m]};padding:16px;text-align:center">
-      <div style="font-size:20px;margin-bottom:4px">${medals[i]}</div>
+
+  document.getElementById('contrib-score-cards').innerHTML = sorted.map((m,i) =>
+    `<div style="background:var(--s1);border:1px solid var(--border);border-top:2px solid ${ACCENTS[m]};padding:16px;text-align:center">
+      <div style="font-size:18px;margin-bottom:4px">${medals[i]}</div>
       <div style="font-size:9px;font-weight:700;color:${ACCENTS[m]};text-transform:uppercase;margin-bottom:6px">${SHORT[m]}</div>
-      <div style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.6rem;color:${ACCENTS[m]};line-height:1">${SCORES[m]}</div>
-      <div style="font-size:9px;color:var(--muted);margin-top:3px">/ 100</div>
+      <div style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.5rem;color:${ACCENTS[m]};line-height:1">${SCORES[m]}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">/ 100</div>
     </div>`).join('');
 
-  function makeSimpleBars(elId, data, fmt) {
-    const sorted2 = [...MEMBERS].sort((a,b)=>data[b]-data[a]);
-    const mx = data[sorted2[0]];
-    document.getElementById(elId).innerHTML = sorted2.map(m => `
-      <div class="bar-row">
+  function makeBars(elId, dataObj, fmt) {
+    const s2 = [...MEMBERS].sort((a,b)=>dataObj[b]-dataObj[a]);
+    const mx = dataObj[s2[0]];
+    document.getElementById(elId).innerHTML = s2.map(m =>
+      `<div class="bar-row">
         <div class="bar-label" style="color:${ACCENTS[m]}">${SHORT[m]}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${(data[m]/mx*100).toFixed(1)}%;background:${ACCENTS[m]}">${(data[m]/mx*100)>20?fmt(data[m]):''}</div></div>
-        <div class="bar-count">${fmt(data[m])}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(dataObj[m]/mx*100).toFixed(1)}%;background:${ACCENTS[m]}">${(dataObj[m]/mx*100)>22?fmt(dataObj[m]):''}</div></div>
+        <div class="bar-count">${fmt(dataObj[m])}</div>
       </div>`).join('');
   }
 
-  makeSimpleBars('contrib-score-bars', SCORES, v => v);
-  makeSimpleBars('contrib-word-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].total_words])), v => v.toLocaleString());
-  makeSimpleBars('contrib-vocab-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].unique_words])), v => v.toLocaleString());
-  makeSimpleBars('contrib-question-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].questions])), v => v);
-  makeSimpleBars('contrib-long-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].long_msgs])), v => v);
+  makeBars('contrib-score-bars', SCORES, v => v);
+  makeBars('contrib-word-bars',  Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].total_words])), v => v.toLocaleString());
+  makeBars('contrib-vocab-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].unique])), v => v.toLocaleString());
+  makeBars('contrib-question-bars', Object.fromEntries(MEMBERS.map(m=>[m,STATS[m].tfidf_sum])), v => v.toFixed(4));
+  makeBars('contrib-long-bars', Object.fromEntries(MEMBERS.map(m=>[m,Math.round(STATS[m].total_words/STATS[m].msgs*100)/100])), v => v.toFixed(2)+'w/msg');
 
-  // Table
-  const cols = ['total_msgs','total_words','unique_words','avg_words','long_pct','questions','media'];
-  const labels = ['Messages','Total Words','Unique Vocab','Avg Words/Msg','Long Msg %','Questions','Media'];
-  let thead = '<thead><tr><th style="text-align:left;padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:400">Member</th>';
-  labels.forEach(l => { thead += `<th style="padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:400">${l}</th>`; });
-  thead += '<th style="padding:6px 10px;border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:400">Score</th></tr></thead>';
-
-  let tbody = '<tbody>';
-  sorted.forEach(m => {
-    const s = STATS[m];
-    tbody += `<tr>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;font-weight:700;color:${ACCENTS[m]};white-space:nowrap">${SHORT[m]}</td>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.total_msgs.toLocaleString()}</td>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.total_words.toLocaleString()}</td>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.unique_words.toLocaleString()}</td>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.avg_words}</td>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.long_pct}%</td>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.questions}</td>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center">${s.media}</td>
-      <td style="padding:6px 10px;border:1px solid var(--border);font-size:10px;text-align:center;font-weight:700;color:${ACCENTS[m]}">${SCORES[m]}</td>
-    </tr>`;
-  });
-  tbody += '</tbody>';
-  document.getElementById('contrib-table').innerHTML = thead + tbody;
+  // Signature word cards
+  document.getElementById('contrib-table').innerHTML = MEMBERS.map(m => {
+    const sw = SIG_WORDS[m];
+    const maxSc = sw[0][1];
+    const bars = sw.slice(0,8).map(([w, sc, cnt, df_p]) => {
+      const pct = Math.round(sc/maxSc*100);
+      const msgPct = STATS[m].msgs > 0 ? (df_p/STATS[m].msgs*100).toFixed(1) : 0;
+      return `<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+        <div style="font-size:10px;min-width:120px;color:${ACCENTS[m]};font-weight:700">${w}</div>
+        <div style="flex:1;height:12px;background:rgba(255,255,255,0.04);overflow:hidden;position:relative">
+          <div style="width:${pct}%;height:100%;background:${ACCENTS[m]};opacity:0.65"></div>
+        </div>
+        <div style="font-size:9px;color:var(--muted);min-width:90px;text-align:right">${cnt}× · ${msgPct}% msgs</div>
+      </div>`;
+    }).join('');
+    return `<div style="background:var(--s1);border:1px solid var(--border);border-top:2px solid ${ACCENTS[m]};padding:14px">
+      <div style="font-size:9px;font-weight:700;color:${ACCENTS[m]};text-transform:uppercase;margin-bottom:4px">${SHORT[m]}</div>
+      <div style="font-size:8px;color:var(--muted);margin-bottom:10px">Dual TF-IDF · TF × IDF_within × IDF_group</div>
+      ${bars}
+      <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border);display:flex;gap:12px;font-size:9px;color:var(--muted);flex-wrap:wrap">
+        <span>Score: <strong style="color:${ACCENTS[m]}">${SCORES[m]}</strong></span>
+        <span>Words: <strong style="color:${ACCENTS[m]}">${STATS[m].total_words.toLocaleString()}</strong></span>
+        <span>Vocab: <strong style="color:${ACCENTS[m]}">${STATS[m].unique.toLocaleString()}</strong></span>
+        <span>TF-IDF: <strong style="color:${ACCENTS[m]}">${STATS[m].tfidf_sum.toFixed(4)}</strong></span>
+      </div>
+    </div>`;
+  }).join('');
 }
 
+// ═══════════════════════════════════════════
+// BUILD N-WORD
+// ═══════════════════════════════════════════
+// BUILD N-WORD
 // ═══════════════════════════════════════════
 // BUILD N-WORD
 // ═══════════════════════════════════════════
@@ -1595,7 +1711,7 @@ function buildContribution() {
 // BUILD N-WORD
 // ═══════════════════════════════════════════
 function buildNWord() {
-  const COUNTS = {"Siyona":0,"Vihaan Shukla":13,"Nishchay Sinha":0,"Ambikesh":0,"Mudit Agarwal":0,"Yadvi Gupta":0,"Tanishka Renjith":0};
+  const COUNTS = {"Siyona":0,"Vihaan Shukla":7,"Nishchay Sinha":0,"Ambikesh":0,"Mudit Agarwal":0,"Yadvi Gupta":0,"Tanishka Renjith":0};
   document.getElementById('nword-bars').innerHTML = MEMBERS.map(m => {
     const v = COUNTS[m];
     return `<div class="bar-row">
@@ -1608,6 +1724,335 @@ function buildNWord() {
 
 buildContribution();
 buildNWord();
+
+// ═══════════════════════════════════════════
+// TIMELINE CHART
+// ═══════════════════════════════════════════
+(function(){
+const TL_DATES  = ["2025-12-11", "2025-12-12", "2025-12-13", "2025-12-14", "2025-12-15", "2025-12-16", "2025-12-17", "2025-12-18", "2025-12-19", "2025-12-20", "2025-12-21", "2025-12-22", "2025-12-23", "2025-12-24", "2025-12-25", "2025-12-26", "2025-12-27", "2025-12-28", "2025-12-29", "2025-12-30", "2025-12-31", "2026-01-01", "2026-01-02", "2026-01-03", "2026-01-04", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-10", "2026-01-11", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-17", "2026-01-18", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-24", "2026-01-25", "2026-01-26", "2026-01-27", "2026-01-30", "2026-01-31", "2026-02-01", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-07", "2026-02-08", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-14", "2026-02-15", "2026-02-16", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-21", "2026-02-22", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-02-28", "2026-03-01", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-07", "2026-03-08", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-14", "2026-03-15", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-21", "2026-03-22", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-28", "2026-03-29", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-03", "2026-04-04", "2026-04-05", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-11", "2026-04-12", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-18", "2026-04-19", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23"];
+const TL_TOTALS = [974, 608, 743, 680, 819, 787, 1030, 839, 1159, 641, 1381, 438, 712, 123, 149, 462, 185, 445, 335, 229, 863, 1141, 366, 394, 295, 115, 253, 300, 145, 380, 531, 399, 405, 333, 371, 1600, 455, 253, 302, 595, 1123, 7, 396, 134, 42, 62, 206, 9, 41, 670, 1116, 1633, 1307, 1091, 1091, 1307, 866, 638, 697, 1165, 1142, 793, 1028, 847, 1358, 1164, 586, 1233, 1678, 1426, 735, 1959, 3150, 2025, 235, 595, 517, 605, 963, 1376, 956, 762, 934, 1707, 825, 1390, 1684, 350, 224, 47, 258, 399, 278, 157, 371, 322, 87, 43, 174, 84, 123, 96, 137, 26, 55, 222, 49, 17, 72, 137, 78, 50, 27, 95, 20, 17, 179, 8, 18, 3, 7, 1, 9, 410, 17, 540, 226, 38, 237, 200, 244, 49];
+const TL_PERSON = {"Siyona": [236, 138, 207, 236, 241, 135, 282, 211, 303, 224, 428, 142, 182, 35, 33, 99, 55, 103, 112, 22, 232, 281, 127, 91, 76, 38, 79, 62, 31, 130, 130, 133, 109, 47, 39, 235, 97, 33, 9, 155, 176, 0, 0, 0, 0, 0, 0, 0, 0, 47, 168, 242, 275, 230, 139, 28, 109, 51, 103, 216, 206, 118, 66, 84, 146, 147, 77, 318, 379, 388, 167, 413, 807, 472, 42, 95, 111, 122, 128, 299, 203, 213, 191, 407, 155, 145, 174, 32, 44, 1, 58, 79, 37, 26, 49, 21, 5, 9, 44, 18, 2, 3, 14, 0, 1, 31, 11, 0, 13, 0, 0, 4, 0, 0, 0, 3, 45, 2, 0, 0, 0, 0, 0, 109, 5, 182, 89, 17, 56, 46, 66, 12], "Vihaan Shukla": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69, 157, 420, 106, 43, 103, 159, 276, 2, 144, 67, 12, 24, 79, 7, 18, 210, 245, 546, 413, 210, 413, 428, 353, 172, 229, 284, 330, 210, 442, 237, 444, 401, 188, 334, 461, 279, 233, 447, 718, 498, 50, 139, 105, 113, 318, 334, 249, 198, 215, 518, 297, 459, 388, 116, 88, 30, 47, 148, 82, 58, 115, 107, 39, 17, 59, 18, 44, 36, 35, 9, 23, 69, 16, 4, 25, 44, 41, 21, 15, 35, 8, 6, 25, 2, 9, 1, 5, 1, 2, 106, 11, 142, 38, 12, 92, 75, 77, 10], "Nishchay Sinha": [138, 130, 180, 118, 117, 219, 139, 178, 248, 102, 281, 41, 136, 14, 21, 103, 47, 69, 57, 52, 184, 266, 82, 86, 53, 16, 22, 64, 36, 46, 156, 92, 71, 77, 66, 331, 93, 55, 75, 64, 213, 0, 53, 9, 18, 11, 80, 1, 11, 164, 222, 319, 234, 284, 218, 368, 188, 102, 92, 273, 209, 198, 225, 98, 237, 173, 43, 198, 186, 261, 147, 532, 753, 424, 36, 51, 98, 146, 147, 324, 216, 134, 102, 227, 140, 318, 217, 54, 59, 4, 58, 113, 40, 25, 64, 66, 18, 13, 23, 17, 18, 21, 30, 7, 13, 55, 13, 3, 18, 28, 7, 0, 1, 19, 2, 4, 35, 0, 1, 0, 0, 0, 3, 34, 0, 73, 52, 3, 17, 39, 67, 20], "Ambikesh": [226, 133, 218, 164, 237, 158, 357, 180, 251, 119, 216, 86, 157, 25, 46, 83, 21, 111, 113, 53, 255, 234, 67, 117, 59, 20, 68, 68, 33, 73, 117, 61, 51, 70, 52, 220, 65, 65, 46, 116, 118, 1, 91, 0, 5, 9, 0, 0, 6, 125, 176, 224, 199, 66, 196, 143, 55, 143, 124, 71, 173, 129, 130, 204, 241, 188, 89, 230, 357, 233, 53, 237, 370, 167, 57, 156, 69, 103, 186, 202, 179, 78, 154, 163, 57, 200, 387, 31, 7, 4, 48, 30, 78, 26, 36, 39, 21, 4, 31, 24, 39, 16, 29, 10, 16, 4, 0, 9, 12, 54, 30, 25, 11, 40, 4, 3, 12, 4, 4, 2, 1, 0, 2, 93, 1, 35, 39, 5, 7, 18, 22, 6], "Mudit Agarwal": [39, 29, 22, 41, 14, 94, 111, 107, 78, 39, 221, 105, 142, 34, 17, 69, 8, 51, 17, 55, 45, 184, 1, 54, 21, 37, 14, 44, 38, 38, 41, 26, 50, 33, 40, 219, 45, 16, 27, 64, 158, 2, 108, 28, 7, 18, 47, 1, 6, 109, 213, 207, 65, 125, 77, 228, 100, 99, 83, 161, 144, 53, 124, 123, 213, 145, 127, 40, 114, 94, 89, 177, 311, 362, 43, 111, 73, 38, 78, 122, 62, 77, 160, 263, 129, 182, 471, 73, 19, 5, 13, 19, 15, 10, 64, 75, 0, 0, 10, 6, 20, 16, 0, 0, 2, 28, 4, 0, 1, 10, 0, 0, 0, 1, 6, 1, 34, 0, 4, 0, 1, 0, 2, 53, 0, 103, 8, 1, 65, 22, 12, 1], "Yadvi Gupta": [185, 118, 87, 84, 176, 127, 139, 157, 227, 148, 219, 56, 94, 10, 30, 72, 39, 72, 30, 46, 99, 143, 69, 28, 86, 3, 60, 53, 7, 77, 75, 75, 122, 30, 13, 132, 44, 38, 34, 12, 150, 1, 0, 0, 0, 0, 0, 0, 0, 15, 92, 81, 100, 158, 48, 109, 60, 70, 66, 102, 41, 76, 37, 99, 72, 109, 45, 99, 105, 165, 46, 151, 183, 101, 4, 40, 51, 83, 101, 82, 43, 60, 87, 69, 38, 61, 42, 29, 3, 3, 34, 4, 26, 9, 41, 10, 4, 0, 7, 1, 0, 4, 11, 0, 0, 32, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 14, 0, 5, 0, 0, 0, 0, 0, 0], "Tanishka Renjith": [150, 60, 29, 37, 9, 54, 2, 6, 52, 9, 11, 8, 1, 5, 2, 35, 15, 35, 6, 1, 37, 17, 0, 12, 0, 0, 3, 5, 0, 12, 12, 12, 1, 7, 0, 43, 0, 1, 1, 5, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 21, 18, 0, 3, 1, 1, 0, 2, 5, 6, 4, 0, 5, 1, 0, 13, 38, 0, 0, 2, 8, 0, 0, 3, 6, 0, 5, 4, 4, 2, 20, 21, 7, 25, 0, 15, 4, 0, 0, 6, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 17, 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]};
+const TL_MEMBERS = ["Siyona","Vihaan Shukla","Nishchay Sinha","Ambikesh","Mudit Agarwal","Yadvi Gupta","Tanishka Renjith"];
+
+let tlView = 'total';
+let tlOffsetX = 0, tlScale = 1;
+let tlDragging = false, tlDragStart = 0, tlDragOffset = 0;
+let tlCanvasW = 0, tlCanvasH = 400;
+const PAD = {l:52,r:20,t:30,b:48};
+
+function tlAccents(m) {
+  const map = {
+    "Siyona":"#a78bfa","Vihaan Shukla":"#60a5fa","Nishchay Sinha":"#34d399",
+    "Ambikesh":"#fb923c","Mudit Agarwal":"#f472b6","Yadvi Gupta":"#facc15","Tanishka Renjith":"#94a3b8"
+  };
+  return map[m] || '#fff';
+}
+
+function smooth7(arr) {
+  return arr.map((_,i) => {
+    const slice = arr.slice(Math.max(0,i-3), Math.min(arr.length,i+4));
+    return slice.reduce((a,b)=>a+b,0)/slice.length;
+  });
+}
+
+function tlSetView(v) {
+  tlView = v;
+  ['total','person','both'].forEach(k => {
+    const el = document.getElementById('tl-v-'+k);
+    if (el) { el.classList.remove('active-vbtn'); el.style.background=''; el.style.color=''; }
+  });
+  const active = document.getElementById('tl-v-'+v);
+  if (active) active.classList.add('active-vbtn');
+  tlDraw();
+}
+window.tlSetView = tlSetView;
+
+function tlZoom(factor) {
+  const w = tlCanvasW - PAD.l - PAD.r;
+  const cx = w / 2;
+  tlScale = Math.max(1, Math.min(20, tlScale * factor));
+  tlOffsetX = Math.max(0, Math.min(w*(tlScale-1), tlOffsetX));
+  tlDraw();
+}
+window.tlZoom = tlZoom;
+
+function tlReset() {
+  tlScale = 1; tlOffsetX = 0; tlDraw();
+}
+window.tlReset = tlReset;
+
+function tlDraw() {
+  const canvas = document.getElementById('tl-canvas');
+  if (!canvas) return;
+  const wrap = document.getElementById('tl-wrap');
+  tlCanvasW = wrap.clientWidth || 800;
+  canvas.width  = tlCanvasW * devicePixelRatio;
+  canvas.height = tlCanvasH * devicePixelRatio;
+  canvas.style.width  = tlCanvasW + 'px';
+  canvas.style.height = tlCanvasH + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  const W = tlCanvasW - PAD.l - PAD.r;
+  const H = tlCanvasH - PAD.t - PAD.b;
+  const N = TL_DATES.length;
+  const smooth = document.getElementById('tl-smooth')?.checked;
+
+  // Background
+  ctx.fillStyle = 'rgba(10,10,25,0)';
+  ctx.fillRect(0,0,tlCanvasW,tlCanvasH);
+
+  const totals = smooth ? smooth7(TL_TOTALS) : TL_TOTALS;
+  const personData = {};
+  TL_MEMBERS.forEach(m => {
+    personData[m] = smooth ? smooth7(TL_PERSON[m]) : TL_PERSON[m];
+  });
+
+  // Determine y-max based on view
+  let yMax = 0;
+  if (tlView === 'total' || tlView === 'both') yMax = Math.max(...totals);
+  if (tlView === 'person' || tlView === 'both') {
+    TL_MEMBERS.forEach(m => { yMax = Math.max(yMax, ...personData[m]); });
+  }
+  yMax = Math.ceil(yMax / 500) * 500 || 500;
+
+  // x helpers
+  const stepW = (W * tlScale) / (N - 1);
+  const xFor = i => PAD.l + i * stepW - tlOffsetX;
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  const gridLines = 5;
+  for (let g = 0; g <= gridLines; g++) {
+    const y = PAD.t + H - (g / gridLines) * H;
+    ctx.beginPath(); ctx.moveTo(PAD.l, y); ctx.lineTo(PAD.l + W, y); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '9px DM Mono, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(g/gridLines*yMax), PAD.l-6, y+3);
+  }
+
+  // Month separators
+  ctx.font = '9px DM Mono, monospace';
+  ctx.textAlign = 'center';
+  let lastMonth = '';
+  TL_DATES.forEach((d, i) => {
+    const month = d.slice(0,7);
+    if (month !== lastMonth) {
+      lastMonth = month;
+      const x = xFor(i);
+      if (x >= PAD.l && x <= PAD.l + W) {
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.moveTo(x, PAD.t); ctx.lineTo(x, PAD.t+H); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(255,255,255,0.4)';
+        const label = new Date(d).toLocaleDateString('en',{month:'short',year:'2-digit'});
+        ctx.fillText(label, Math.max(PAD.l+20, Math.min(PAD.l+W-20, x+20)), PAD.t + H + 18);
+      }
+    }
+  });
+
+  // Clip to chart area
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(PAD.l, PAD.t, W, H+2);
+  ctx.clip();
+
+  function drawLine(data, color, lineW=2, alpha=1) {
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = lineW;
+    ctx.lineJoin = 'round';
+    let started = false;
+    data.forEach((v, i) => {
+      const x = xFor(i);
+      const y = PAD.t + H - (v / yMax) * H;
+      if (!started) { ctx.moveTo(x, y); started = true; }
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function fillArea(data, color) {
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.08;
+    const x0 = xFor(0), xN = xFor(N-1);
+    ctx.moveTo(x0, PAD.t+H);
+    data.forEach((v,i) => {
+      const x = xFor(i);
+      const y = PAD.t + H - (v/yMax)*H;
+      ctx.lineTo(x,y);
+    });
+    ctx.lineTo(xN, PAD.t+H);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  if (tlView === 'total' || tlView === 'both') {
+    fillArea(totals, '#a78bfa');
+    drawLine(totals, '#c4b5fd', tlView==='both'?2.5:2.5, tlView==='both'?0.9:1);
+  }
+  if (tlView === 'person' || tlView === 'both') {
+    TL_MEMBERS.forEach(m => {
+      const col = tlAccents(m);
+      drawLine(personData[m], col, 1.5, tlView==='both'?0.75:1);
+    });
+  }
+
+  ctx.restore();
+
+  // X-axis line
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.l, PAD.t+H);
+  ctx.lineTo(PAD.l+W, PAD.t+H);
+  ctx.stroke();
+}
+window.tlDraw = tlDraw;
+
+// Legend
+function buildTlLegend() {
+  const el = document.getElementById('tl-legend');
+  if (!el) return;
+  el.innerHTML = '<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#c4b5fd"><div style="width:24px;height:2px;background:#c4b5fd;border-radius:1px"></div>Total</div>'
+    + TL_MEMBERS.map(m => {
+      const col = tlAccents(m);
+      const short = m.split(' ')[0];
+      return `<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:${col}"><div style="width:18px;height:2px;background:${col};border-radius:1px"></div>${short}</div>`;
+    }).join('');
+}
+
+// Tooltip on hover
+function setupTlHover() {
+  const canvas = document.getElementById('tl-canvas');
+  const tip = document.getElementById('tl-tip');
+  if (!canvas || !tip) return;
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const W = tlCanvasW - PAD.l - PAD.r;
+    const N = TL_DATES.length;
+    const stepW = (W * tlScale) / (N - 1);
+    const idx = Math.round((mx - PAD.l + tlOffsetX) / stepW);
+    if (idx < 0 || idx >= N) { tip.style.display='none'; return; }
+    const d = TL_DATES[idx];
+    const total = TL_TOTALS[idx];
+    let html = `<div style="font-weight:700;margin-bottom:6px;color:#fff">${new Date(d+'T12:00:00').toLocaleDateString('en',{day:'numeric',month:'short',year:'numeric'})}</div>`;
+    html += `<div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:4px"><span style="color:#c4b5fd">Total</span><strong style="color:#c4b5fd">${total}</strong></div>`;
+    TL_MEMBERS.forEach(m => {
+      const v = TL_PERSON[m][idx];
+      if (v > 0) {
+        const col = tlAccents(m);
+        const short = m.split(' ')[0];
+        html += `<div style="display:flex;justify-content:space-between;gap:16px"><span style="color:${col}">${short}</span><span style="color:${col}">${v}</span></div>`;
+      }
+    });
+    tip.innerHTML = html;
+    tip.style.display = 'block';
+    const tx = Math.min(mx + 14, tlCanvasW - 180);
+    const ty = Math.max(8, e.clientY - rect.top - 60);
+    tip.style.left = tx + 'px';
+    tip.style.top  = ty + 'px';
+  });
+  canvas.addEventListener('mouseleave', () => { tip.style.display='none'; });
+}
+
+// Drag to pan
+function setupTlDrag() {
+  const canvas = document.getElementById('tl-canvas');
+  if (!canvas) return;
+  canvas.addEventListener('mousedown', e => {
+    tlDragging = true;
+    tlDragStart = e.clientX;
+    tlDragOffset = tlOffsetX;
+    canvas.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mouseup', () => { tlDragging = false; canvas.style.cursor='crosshair'; });
+  window.addEventListener('mousemove', e => {
+    if (!tlDragging) return;
+    const W = tlCanvasW - PAD.l - PAD.r;
+    tlOffsetX = Math.max(0, Math.min(W*(tlScale-1), tlDragOffset - (e.clientX - tlDragStart)));
+    tlDraw();
+  });
+  // Touch drag
+  canvas.addEventListener('touchstart', e => { tlDragging=true; tlDragStart=e.touches[0].clientX; tlDragOffset=tlOffsetX; }, {passive:true});
+  canvas.addEventListener('touchend',   () => { tlDragging=false; });
+  canvas.addEventListener('touchmove',  e => {
+    if (!tlDragging) return;
+    const W = tlCanvasW - PAD.l - PAD.r;
+    tlOffsetX = Math.max(0, Math.min(W*(tlScale-1), tlDragOffset-(e.touches[0].clientX-tlDragStart)));
+    tlDraw();
+  }, {passive:true});
+}
+
+// Scroll / wheel zoom
+function setupTlScroll() {
+  const canvas = document.getElementById('tl-canvas');
+  if (!canvas) return;
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.25 : 0.8;
+    const W = tlCanvasW - PAD.l - PAD.r;
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left - PAD.l;
+    const worldX = (mx + tlOffsetX) / tlScale;
+    tlScale = Math.max(1, Math.min(20, tlScale * factor));
+    tlOffsetX = Math.max(0, Math.min(W*(tlScale-1), worldX*tlScale - mx));
+    tlDraw();
+  }, {passive:false});
+}
+
+// Pinch zoom
+function setupTlPinch() {
+  const canvas = document.getElementById('tl-canvas');
+  if (!canvas) return;
+  let lastDist = 0;
+  canvas.addEventListener('touchstart', e => { if(e.touches.length===2) lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY); }, {passive:true});
+  canvas.addEventListener('touchmove', e => {
+    if (e.touches.length===2) {
+      const dist = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      if (lastDist) {
+        const W = tlCanvasW - PAD.l - PAD.r;
+        tlScale = Math.max(1, Math.min(20, tlScale*(dist/lastDist)));
+        tlOffsetX = Math.max(0, Math.min(W*(tlScale-1), tlOffsetX));
+        tlDraw();
+      }
+      lastDist = dist;
+    }
+  }, {passive:true});
+}
+
+// Init when section becomes visible
+const origShowSec = window.showSec;
+window.showSec = function(id, el) {
+  origShowSec && origShowSec(id, el);
+  if (id === 'timeline') {
+    setTimeout(() => {
+      buildTlLegend();
+      tlDraw();
+      setupTlHover();
+      setupTlDrag();
+      setupTlScroll();
+      setupTlPinch();
+    }, 50);
+  }
+};
+
+// Also handle window resize
+window.addEventListener('resize', () => {
+  if (document.getElementById('sec-timeline')?.style.display !== 'none' &&
+      document.getElementById('sec-timeline')?.offsetParent !== null) tlDraw();
+});
+
+})();
 
 </script>
 </body>
